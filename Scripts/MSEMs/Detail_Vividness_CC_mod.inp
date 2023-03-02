@@ -1,0 +1,47 @@
+!MSEM for Episodic (Internal) details and Vividness with CC, 12/29/2022
+title: Modification indices for detail and vividness with CC;
+
+DATA: 
+FILE = "df_MPlus_12_29.dat";
+VARIABLE:
+NAMES = ID trial DERS Avo AvoS LNB_MEFF VP_Pos VP_Neg Rich_Pos Rich_Neg Det_Pos
+     Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos Ext_Neg DERS_sc Avo_sc LNB_sc
+     DERS_sq Avo_sq LNB_sq; 
+USEVARIABLES = ID DERS_sc Avo LNB_sc Int_Pos Int_Neg Viv_Pos Viv_Neg CCxDERS;
+MISSING=.;
+CLUSTER = ID; 
+BETWEEN = DERS_sc Avo LNB_sc CCxDERS;
+DEFINE: CCxDERS = LNB_sc*DERS_sc;
+ANALYSIS:
+TYPE = TWOLEVEL;
+ESTIMATOR = ML;
+MODEL:
+%WITHIN%    
+Int_Neg; !variance at the within-person level
+Int_Pos; !if you want to model means, use [] around the var name
+Viv_Pos;
+Viv_Neg;
+%BETWEEN%     
+Int_Neg on Avo (bd1) 
+         DERS_sc (cd1);
+Int_Pos on Avo (bd2)
+        DERS_sc (cd2);
+Viv_Neg on Avo (bv1) 
+         DERS_sc (cv1);
+Viv_Pos on Avo (bv2)
+        DERS_sc (cv2);
+Avo on DERS_sc (a);    
+AVO on LNB_sc; 
+AVO on CCxDERS; 
+Int_Pos WITH Int_Neg; !residual covariance
+Viv_Pos WITH Viv_Neg;     
+INT_NEG WITH INT_POS;
+VIV_POS WITH INT_POS;
+VIV_POS WITH INT_NEG;
+VIV_NEG WITH INT_POS;
+VIV_NEG WITH INT_NEG;
+VIV_NEG WITH VIV_POS;
+
+OUTPUT: 
+stand residual;
+mod(0);

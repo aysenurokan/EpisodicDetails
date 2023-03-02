@@ -1,0 +1,358 @@
+Mplus VERSION 8.4 (Mac)
+MUTHEN & MUTHEN
+12/29/2022   4:06 PM
+
+INPUT INSTRUCTIONS
+
+  !MSEM for Vantage Point, 12/28/2022
+  title: Simple model looking at vantage point only with sqrt predictors;
+
+  DATA: FILE = "df_MPlus_12_28.dat";
+  VARIABLE:
+  NAMES = ID trial DERS Avo AvoS LNB_MEFF LNB_log AMT_Pos AMT_Neg VP_Pos VP_Neg
+       Rich_Pos Rich_Neg Det_Pos Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos
+       Ext_Neg DERS_sq Avo_sq;
+  MISSING=.;
+  USEVARIABLES = ID DERS_sq Avo_sq VP_Pos VP_Neg;
+  CLUSTER = ID;
+  BETWEEN = DERS_sq Avo_sq;
+  CATEGORICAL = VP_Pos VP_neg;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  ESTIMATOR = ML;
+  MODEL:
+  %BETWEEN%
+  VP_Neg on Avo_sq (b1)
+           DERS_sq (c1);
+  VP_Pos on Avo_sq (b2)
+          DERS_sq (c2);
+  Avo_sq on DERS_sq (a);
+  VP_Pos WITH VP_Neg;
+
+  MODEL CONSTRAINT:
+  NEW(pos_ind_vp pos_tot_vp neg_ind_vp neg_tot_vp dif_ind_vp);
+  pos_ind_vp = b2*a;
+  pos_tot_vp = b2*a + c2;
+  neg_ind_vp = b1*a;
+  neg_tot_vp = b1*a + c1;
+  dif_ind_vp = pos_ind_vp - neg_ind_vp;
+
+  Output:
+  stdyx;
+
+
+
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      VP_POS      11 13 17 21 23 29 30 31 34 35 41 43 45 47 52 53 60 66 69 73 75 80 81 84 88 89
+                  91 96 3 9
+      VP_NEG      13 14 15 23 29 30 34 35 36 41 43 44 48 50 56 59 60 63 72 73 80 81 84 88 89 91
+                  92 96 3 6 7 8 9
+
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Simple model looking at vantage point only with sqrt predictors;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         570
+
+Number of dependent variables                                    3
+Number of independent variables                                  1
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   AVO_SQ
+
+  Binary and ordered categorical (ordinal)
+   VP_POS      VP_NEG
+
+Observed independent variables
+   DERS_SQ
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Between variables
+   DERS_SQ     AVO_SQ
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            2
+  Adaptive quadrature                                           ON
+Link                                                         LOGIT
+Cholesky                                                       OFF
+
+Input data file(s)
+  df_MPlus_12_28.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             6
+     Number of y missing data patterns           2
+     Number of u missing data patterns           4
+     Number of clusters                         95
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              VP_POS        VP_NEG        AVO_SQ        DERS_SQ
+              ________      ________      ________      ________
+ VP_POS         0.854
+ VP_NEG         0.719         0.828
+ AVO_SQ         0.846         0.818         0.989
+ DERS_SQ        0.854         0.828         0.989         1.000
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              VP_POS        VP_NEG
+              ________      ________
+ VP_POS         0.854
+ VP_NEG         0.719         0.828
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              AVO_SQ        DERS_SQ
+              ________      ________
+ AVO_SQ         0.989
+ DERS_SQ        0.989         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    VP_POS
+      Category 1    0.756          368.000
+      Category 2    0.244          119.000
+    VP_NEG
+      Category 1    0.761          359.000
+      Category 2    0.239          113.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AVO_SQ                5.394       0.419       4.123    1.06%       4.796      5.196      5.385
+              94.000       0.390      -0.124       7.071    1.06%       5.477      5.916
+     DERS_SQ               6.513       0.268       4.472    2.11%       5.477      6.164      6.481
+              95.000       1.235      -0.665       8.944    1.05%       6.782      7.416
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       12
+
+Loglikelihood
+
+          H0 Value                        -588.346
+
+Information Criteria
+
+          Akaike (AIC)                    1200.692
+          Bayesian (BIC)                  1252.840
+          Sample-Size Adjusted BIC        1214.745
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+Between Level
+
+ VP_NEG     ON
+    AVO_SQ             0.445      0.290      1.536      0.125
+    DERS_SQ           -0.122      0.163     -0.749      0.454
+
+ VP_POS     ON
+    AVO_SQ            -0.009      0.255     -0.033      0.973
+    DERS_SQ           -0.044      0.145     -0.305      0.760
+
+ AVO_SQ     ON
+    DERS_SQ            0.276      0.050      5.491      0.000
+
+ VP_POS   WITH
+    VP_NEG             0.763      0.245      3.110      0.002
+
+ Intercepts
+    AVO_SQ             3.597      0.332     10.839      0.000
+
+ Thresholds
+    VP_POS$1           0.931      1.187      0.785      0.433
+    VP_NEG$1           2.994      1.371      2.184      0.029
+
+ Residual Variances
+    VP_POS             0.618      0.284      2.172      0.030
+    VP_NEG             0.947      0.391      2.423      0.015
+    AVO_SQ             0.295      0.043      6.856      0.000
+
+New/Additional Parameters
+    POS_IND_          -0.002      0.070     -0.033      0.973
+    POS_TOT_          -0.047      0.123     -0.381      0.703
+    NEG_IND_           0.123      0.083      1.483      0.138
+    NEG_TOT_           0.001      0.140      0.005      0.996
+    DIF_IND_          -0.125      0.085     -1.480      0.139
+
+
+RESULTS IN PROBABILITY SCALE
+
+                    Estimate
+
+Within Level
+
+
+Between Level
+
+ VP_POS
+    Category 1         0.749
+    Category 2         0.251
+ VP_NEG
+    Category 1         0.930
+    Category 2         0.070
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+Between Level
+
+ VP_NEG     ON
+    AVO_SQ             0.277      0.173      1.595      0.111
+    DERS_SQ           -0.135      0.179     -0.756      0.450
+
+ VP_POS     ON
+    AVO_SQ            -0.007      0.202     -0.033      0.973
+    DERS_SQ           -0.063      0.205     -0.306      0.760
+
+ AVO_SQ     ON
+    DERS_SQ            0.492      0.078      6.306      0.000
+
+ VP_POS   WITH
+    VP_NEG             0.998      0.023     43.201      0.000
+
+ Intercepts
+    AVO_SQ             5.767      0.852      6.770      0.000
+
+ Thresholds
+    VP_POS$1           1.182      1.525      0.775      0.438
+    VP_NEG$1           2.985      1.339      2.230      0.026
+
+ Residual Variances
+    VP_POS             0.996      0.023     43.622      0.000
+    VP_NEG             0.942      0.073     12.954      0.000
+    AVO_SQ             0.758      0.077      9.864      0.000
+
+
+R-SQUARE
+
+Within Level
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    VP_POS             0.004      0.023      0.192      0.848
+    VP_NEG             0.058      0.073      0.797      0.425
+    AVO_SQ             0.242      0.077      3.153      0.002
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.168E-06
+       (ratio of smallest to largest eigenvalue)
+
+
+     Beginning Time:  16:06:57
+        Ending Time:  16:07:01
+       Elapsed Time:  00:00:04
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2019 Muthen & Muthen

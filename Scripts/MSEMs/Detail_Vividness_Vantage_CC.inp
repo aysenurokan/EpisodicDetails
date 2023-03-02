@@ -1,0 +1,65 @@
+!MSEM for Detail, Vividness and Vantage Point with CC, 12/29/2022
+title: Complete Model looking at detail, vividness and vantage point with CC;
+
+DATA: 
+FILE = "df_MPlus_12_29.dat";
+VARIABLE:
+NAMES = ID trial DERS Avo AvoS LNB_MEFF VP_Pos VP_Neg Rich_Pos Rich_Neg Det_Pos
+     Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos Ext_Neg DERS_sc Avo_sc LNB_sc
+     DERS_sq Avo_sq LNB_sq; 
+USEVARIABLES = ID DERS_sc LNB_sc Avo Int_Pos Int_Neg Viv_Pos Viv_Neg VP_Pos VP_Neg CCxDERS;
+MISSING=.;
+CLUSTER = ID; 
+BETWEEN = DERS_sc Avo LNB_sc CCxDERS;
+Categorical = VP_Pos VP_Neg;
+DEFINE: CCxDERS = LNB_sc*DERS_sc;
+ANALYSIS:
+TYPE = TWOLEVEL;
+ESTIMATOR = WLSMV;
+MODEL:
+%WITHIN%    
+Int_Neg;
+Int_Pos;
+Viv_Neg; !variance at the within-person level
+Viv_Pos; !if you want to model means, use [] around the var name
+%BETWEEN%     
+Int_Neg on Avo (b1) 
+         DERS_sc (c1);
+Int_Pos on Avo (b2)
+        DERS_sc (c2);
+Viv_Neg on Avo (bd1) 
+         DERS_sc (cd1);
+Viv_Pos on Avo (bd2)
+        DERS_sc (cd2);
+VP_Neg on Avo (bv1) 
+         DERS_sc (cv1);
+VP_Pos on Avo (bv2)
+        DERS_sc (cv2);
+Avo on DERS_sc (a);    
+AVO on LNB_sc; 
+AVO on CCxDERS;    
+Viv_Pos WITH Viv_Neg; !residual covariance
+Int_Neg WITH Int_Pos;
+                
+MODEL CONSTRAINT:
+NEW(pos_ind_int pos_tot_int neg_ind_int neg_tot_int dif_ind_int
+        pos_ind_viv pos_tot_viv neg_ind_viv neg_tot_viv dif_ind_viv 
+	pos_ind_vp pos_tot_vp neg_ind_vp neg_tot_vp dif_ind_vp);
+pos_ind_int = b2*a;
+pos_tot_int = b2*a + c2;
+neg_ind_int = b1*a;
+neg_tot_int = b1*a + c1;
+dif_ind_int = pos_ind_int - neg_ind_int;
+pos_ind_viv = bd2*a;
+pos_tot_viv = bd2*a + cd2;
+neg_ind_viv = bd1*a;
+neg_tot_viv = bd1*a + cd1;
+dif_ind_viv = pos_ind_viv - neg_ind_viv;
+pos_ind_vp = bv2*a;
+pos_tot_vp = bv2*a + cv2;
+neg_ind_vp = bv1*a;
+neg_tot_vp = bv1*a + cv1;
+dif_ind_vp = pos_ind_vp - neg_ind_vp;
+
+OUTPUT: 
+stand residual;

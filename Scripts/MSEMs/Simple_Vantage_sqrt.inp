@@ -1,0 +1,35 @@
+!MSEM for Vantage Point, 12/28/2022
+title: Simple model looking at vantage point only with sqrt predictors;
+
+DATA: FILE = "df_MPlus_12_28.dat";
+VARIABLE: 
+NAMES = ID trial DERS Avo AvoS LNB_MEFF LNB_log AMT_Pos AMT_Neg VP_Pos VP_Neg
+     Rich_Pos Rich_Neg Det_Pos Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos
+     Ext_Neg DERS_sq Avo_sq; 
+MISSING=.;
+USEVARIABLES = ID DERS_sq Avo_sq VP_Pos VP_Neg;
+CLUSTER = ID; 
+BETWEEN = DERS_sq Avo_sq;
+CATEGORICAL = VP_Pos VP_neg;
+ANALYSIS:
+TYPE = TWOLEVEL;
+ESTIMATOR = ML;
+MODEL:
+%BETWEEN%     
+VP_Neg on Avo_sq (b1) 
+         DERS_sq (c1);
+VP_Pos on Avo_sq (b2)
+        DERS_sq (c2);
+Avo_sq on DERS_sq (a);       
+VP_Pos WITH VP_Neg;   
+                
+MODEL CONSTRAINT:
+NEW(pos_ind_vp pos_tot_vp neg_ind_vp neg_tot_vp dif_ind_vp);
+pos_ind_vp = b2*a;
+pos_tot_vp = b2*a + c2;
+neg_ind_vp = b1*a;
+neg_tot_vp = b1*a + c1;
+dif_ind_vp = pos_ind_vp - neg_ind_vp;
+
+Output:
+stdyx;

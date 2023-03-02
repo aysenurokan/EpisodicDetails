@@ -1,0 +1,27 @@
+------Begin Mplus Model Run: 29Dec2022 16:05:49------
+Run options:
+	Recursive (run models in subdirectories): FALSE
+	Show output on console: FALSE
+	Replace existing outfile: always
+------
+Currently running model: Detail_sqrt.inp
+Currently running model: Detail_Vantage_CC.inp
+Currently running model: Detail_Vantage.inp
+Currently running model: Detail_Vividness_CC.inp
+Currently running model: Detail_Vividness_Vantage_CC.inp
+Currently running model: Detail_Vividness_Vantage.inp
+Currently running model: Detail_Vividness.inp
+Currently running model: Simple_Detail_CC.inp
+Currently running model: Simple_Detail_sqrt.inp
+Currently running model: Simple_Detail.inp
+Currently running model: Simple_Vantage_Point.inp
+Currently running model: Simple_Vantage_sqrt.inp
+Currently running model: Simple_Vividness_12.22.inp
+Currently running model: Simple_Vividness_CC.inp
+Currently running model: Simple_Vividness_sqrt.inp
+Currently running model: Simple_Vividness.inp
+Currently running model: Simple_VP_CC.inp
+Currently running model: Vantage_Vividness.inp
+Currently running model: Vividness_VP_CC.inp
+
+------End Mplus Model Run: 29Dec2022 16:07:29------

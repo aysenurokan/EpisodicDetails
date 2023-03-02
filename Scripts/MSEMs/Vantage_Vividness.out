@@ -1,0 +1,584 @@
+Mplus VERSION 8.4 (Mac)
+MUTHEN & MUTHEN
+12/29/2022   4:07 PM
+
+INPUT INSTRUCTIONS
+
+  !MSEM for Vividness and Vantage Point, 12/29/2022
+  title: Model looking at vividness and vantage point;
+
+  DATA:
+  FILE = "df_MPlus_12_29.dat";
+  VARIABLE:
+  NAMES = ID trial DERS Avo AvoS LNB_MEFF VP_Pos VP_Neg Rich_Pos Rich_Neg Det_Pos
+       Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos Ext_Neg DERS_sc Avo_sc LNB_sc
+       DERS_sq Avo_sq LNB_sq;
+  USEVARIABLES = ID DERS Avo Viv_Pos Viv_Neg VP_Pos VP_Neg;
+  MISSING=.;
+  CLUSTER = ID;
+  BETWEEN = DERS Avo;
+  categorical = VP_Pos VP_Neg;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  ESTIMATOR = ML;
+  MODEL:
+  %WITHIN%
+  Viv_Neg; !variance at the within-person level
+  Viv_Pos; !if you want to model means, use [] around the var name
+  %BETWEEN%
+  Viv_Neg on Avo (bd1)
+           DERS (cd1);
+  Viv_Pos on Avo (bd2)
+          DERS (cd2);
+  VP_Neg on Avo (bv1)
+           DERS (cv1);
+  VP_Pos on Avo (bv2)
+          DERS (cv2);
+  Avo on DERS (a);
+  Viv_Pos WITH Viv_Neg; !residual covariance
+
+  MODEL CONSTRAINT:
+  NEW(pos_ind_viv pos_tot_viv neg_ind_viv neg_tot_viv dif_ind_viv
+  	pos_ind_vp pos_tot_vp neg_ind_vp neg_tot_vp dif_ind_vp);
+  pos_ind_viv = bd2*a;
+  pos_tot_viv = bd2*a + cd2;
+  neg_ind_viv = bd1*a;
+  neg_tot_viv = bd1*a + cd1;
+  dif_ind_viv = pos_ind_viv - neg_ind_viv;
+  pos_ind_vp = bv2*a;
+  pos_tot_vp = bv2*a + cv2;
+  neg_ind_vp = bv1*a;
+  neg_tot_vp = bv1*a + cv1;
+  dif_ind_vp = pos_ind_vp - neg_ind_vp;
+
+  OUTPUT:
+  stand residual;
+
+
+
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      VP_POS      11 13 17 21 23 29 30 31 34 35 41 43 45 47 52 53 60 66 69 73 75 80 81 84 88 89
+                  91 96 3 9
+      VP_NEG      13 14 15 23 29 30 34 35 36 41 43 44 48 50 56 59 60 63 72 73 80 81 84 88 89 91
+                  92 96 3 6 7 8 9
+
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Model looking at vividness and vantage point;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         570
+
+Number of dependent variables                                    5
+Number of independent variables                                  1
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   AVO         VIV_POS     VIV_NEG
+
+  Binary and ordered categorical (ordinal)
+   VP_POS      VP_NEG
+
+Observed independent variables
+   DERS
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Between variables
+   DERS        AVO
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            2
+  Adaptive quadrature                                           ON
+Link                                                         LOGIT
+Cholesky                                                       OFF
+
+Input data file(s)
+  df_MPlus_12_29.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             6
+     Number of y missing data patterns           6
+     Number of u missing data patterns           4
+     Number of clusters                         95
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              VP_POS        VP_NEG        AVO           VIV_POS       VIV_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.854
+ VP_NEG         0.719         0.828
+ AVO            0.846         0.818         0.989
+ VIV_POS        0.854         0.719         0.846         0.854
+ VIV_NEG        0.719         0.828         0.818         0.719         0.828
+ DERS           0.854         0.828         0.989         0.854         0.828
+
+
+           Covariance Coverage
+              DERS
+              ________
+ DERS           1.000
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              VP_POS        VP_NEG
+              ________      ________
+ VP_POS         0.854
+ VP_NEG         0.719         0.828
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              AVO           VIV_POS       VIV_NEG       DERS
+              ________      ________      ________      ________
+ AVO            0.989
+ VIV_POS        0.846         0.854
+ VIV_NEG        0.818         0.719         0.828
+ DERS           0.989         0.854         0.828         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    VP_POS
+      Category 1    0.756          368.000
+      Category 2    0.244          119.000
+    VP_NEG
+      Category 1    0.761          359.000
+      Category 2    0.239          113.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AVO                  29.489       0.710      17.000    1.06%      23.000     27.000     29.000
+              94.000      47.867       0.311      50.000    1.06%      30.000     35.000
+     VIV_POS              16.782      -0.062       5.000    0.41%      13.000     15.000     17.000
+             487.000      20.593      -0.649      25.000    5.13%      18.000     21.000
+     VIV_NEG              17.078      -0.179       6.000    0.64%      13.000     16.000     17.000
+             472.000      19.941      -0.649      25.000    4.66%      19.000     21.000
+     DERS                 43.653       0.584      20.000    2.11%      30.000     38.000     42.000
+              95.000     221.237      -0.371      80.000    1.05%      46.000     55.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       22
+
+Loglikelihood
+
+          H0 Value                       -3534.178
+
+Information Criteria
+
+          Akaike (AIC)                    7112.356
+          Bayesian (BIC)                  7207.960
+          Sample-Size Adjusted BIC        7138.120
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    VIV_POS           13.616      0.971     14.030      0.000
+    VIV_NEG           14.255      1.035     13.774      0.000
+
+Between Level
+
+ VIV_NEG    ON
+    AVO                0.012      0.050      0.245      0.806
+    DERS               0.026      0.023      1.114      0.265
+
+ VIV_POS    ON
+    AVO               -0.019      0.053     -0.364      0.716
+    DERS               0.001      0.025      0.039      0.969
+
+ VP_NEG     ON
+    AVO                0.037      0.025      1.513      0.130
+    DERS              -0.011      0.012     -0.917      0.359
+
+ VP_POS     ON
+    AVO               -0.004      0.022     -0.168      0.866
+    DERS              -0.003      0.010     -0.308      0.758
+
+ AVO        ON
+    DERS               0.226      0.042      5.401      0.000
+
+ VIV_POS  WITH
+    VIV_NEG            5.680      1.097      5.179      0.000
+
+ Intercepts
+    AVO               19.652      1.923     10.218      0.000
+    VIV_POS           17.224      1.429     12.050      0.000
+    VIV_NEG           15.520      1.340     11.580      0.000
+
+ Thresholds
+    VP_POS$1           0.999      0.592      1.687      0.092
+    VP_NEG$1           1.978      0.673      2.939      0.003
+
+ Residual Variances
+    VP_POS             0.495      0.286      1.734      0.083
+    VP_NEG             0.777      0.356      2.181      0.029
+    AVO               36.491      5.322      6.856      0.000
+    VIV_POS            6.947      1.407      4.938      0.000
+    VIV_NEG            5.538      1.245      4.449      0.000
+
+New/Additional Parameters
+    POS_IND_          -0.004      0.012     -0.363      0.717
+    POS_TOT_          -0.003      0.021     -0.159      0.873
+    NEG_IND_           0.003      0.011      0.245      0.806
+    NEG_TOT_           0.028      0.020      1.421      0.155
+    DIF_IND_          -0.007      0.010     -0.702      0.483
+    POS_IND_          -0.001      0.005     -0.168      0.867
+    POS_TOT_          -0.004      0.009     -0.454      0.650
+    NEG_IND_           0.008      0.006      1.461      0.144
+    NEG_TOT_          -0.002      0.010     -0.219      0.827
+    DIF_IND_          -0.009      0.008     -1.214      0.225
+
+
+RESULTS IN PROBABILITY SCALE
+
+                    Estimate
+
+Within Level
+
+
+Between Level
+
+ VP_POS
+    Category 1         0.743
+    Category 2         0.257
+ VP_NEG
+    Category 1         0.859
+    Category 2         0.141
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    VIV_POS            1.000      0.000    999.000    999.000
+    VIV_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ VIV_NEG    ON
+    AVO                0.035      0.144      0.245      0.806
+    DERS               0.159      0.142      1.124      0.261
+
+ VIV_POS    ON
+    AVO               -0.051      0.139     -0.364      0.716
+    DERS               0.005      0.139      0.039      0.969
+
+ VP_NEG     ON
+    AVO                0.284      0.183      1.556      0.120
+    DERS              -0.174      0.188     -0.929      0.353
+
+ VP_POS     ON
+    AVO               -0.037      0.218     -0.168      0.866
+    DERS              -0.067      0.217     -0.308      0.758
+
+ AVO        ON
+    DERS               0.486      0.079      6.178      0.000
+
+ VIV_POS  WITH
+    VIV_NEG            0.916      0.079     11.637      0.000
+
+ Intercepts
+    AVO                2.843      0.431      6.599      0.000
+    VIV_POS            6.527      0.835      7.818      0.000
+    VIV_NEG            6.488      0.981      6.612      0.000
+
+ Thresholds
+    VP_POS$1           1.413      0.920      1.535      0.125
+    VP_NEG$1           2.172      0.775      2.803      0.005
+
+ Residual Variances
+    VP_POS             0.992      0.034     29.604      0.000
+    VP_NEG             0.937      0.081     11.626      0.000
+    AVO                0.764      0.076      9.995      0.000
+    VIV_POS            0.998      0.012     85.653      0.000
+    VIV_NEG            0.968      0.044     22.089      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    VIV_POS            1.000      0.000    999.000    999.000
+    VIV_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ VIV_NEG    ON
+    AVO                0.035      0.144      0.245      0.806
+    DERS               0.011      0.010      1.128      0.259
+
+ VIV_POS    ON
+    AVO               -0.051      0.139     -0.364      0.716
+    DERS               0.000      0.009      0.039      0.969
+
+ VP_NEG     ON
+    AVO                0.284      0.183      1.556      0.120
+    DERS              -0.012      0.013     -0.932      0.352
+
+ VP_POS     ON
+    AVO               -0.037      0.218     -0.168      0.866
+    DERS              -0.004      0.015     -0.308      0.758
+
+ AVO        ON
+    DERS               0.033      0.005      6.534      0.000
+
+ VIV_POS  WITH
+    VIV_NEG            0.916      0.079     11.637      0.000
+
+ Intercepts
+    AVO                2.843      0.431      6.599      0.000
+    VIV_POS            6.527      0.835      7.818      0.000
+    VIV_NEG            6.488      0.981      6.612      0.000
+
+ Thresholds
+    VP_POS$1           1.413      0.920      1.535      0.125
+    VP_NEG$1           2.172      0.775      2.803      0.005
+
+ Residual Variances
+    VP_POS             0.992      0.034     29.604      0.000
+    VP_NEG             0.937      0.081     11.626      0.000
+    AVO                0.764      0.076      9.995      0.000
+    VIV_POS            0.998      0.012     85.653      0.000
+    VIV_NEG            0.968      0.044     22.089      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    VIV_POS           13.616      0.971     14.030      0.000
+    VIV_NEG           14.255      1.035     13.774      0.000
+
+Between Level
+
+ VIV_NEG    ON
+    AVO                0.012      0.050      0.245      0.806
+    DERS               0.026      0.023      1.114      0.265
+
+ VIV_POS    ON
+    AVO               -0.019      0.053     -0.364      0.716
+    DERS               0.001      0.025      0.039      0.969
+
+ VP_NEG     ON
+    AVO                0.037      0.025      1.513      0.130
+    DERS              -0.011      0.012     -0.917      0.359
+
+ VP_POS     ON
+    AVO               -0.004      0.022     -0.168      0.866
+    DERS              -0.003      0.010     -0.308      0.758
+
+ AVO        ON
+    DERS               0.226      0.042      5.401      0.000
+
+ VIV_POS  WITH
+    VIV_NEG            5.680      1.097      5.179      0.000
+
+ Intercepts
+    AVO               19.652      1.923     10.218      0.000
+    VIV_POS           17.224      1.429     12.050      0.000
+    VIV_NEG           15.520      1.340     11.580      0.000
+
+ Thresholds
+    VP_POS$1           0.999      0.592      1.687      0.092
+    VP_NEG$1           1.978      0.673      2.939      0.003
+
+ Residual Variances
+    VP_POS             0.495      0.286      1.734      0.083
+    VP_NEG             0.777      0.356      2.181      0.029
+    AVO               36.491      5.322      6.856      0.000
+    VIV_POS            6.947      1.407      4.938      0.000
+    VIV_NEG            5.538      1.245      4.449      0.000
+
+
+R-SQUARE
+
+Within Level
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    VP_POS             0.008      0.034      0.244      0.807
+    VP_NEG             0.063      0.081      0.783      0.434
+    AVO                0.236      0.076      3.089      0.002
+    VIV_POS            0.002      0.012      0.199      0.842
+    VIV_NEG            0.032      0.044      0.733      0.464
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.183E-07
+       (ratio of smallest to largest eigenvalue)
+
+
+RESIDUAL OUTPUT
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED)
+
+
+           Model Estimated Means
+              AVO           VIV_POS       VIV_NEG
+              ________      ________      ________
+               29.508        16.696        16.999
+
+
+           Residuals for Means
+              AVO           VIV_POS       VIV_NEG
+              ________      ________      ________
+               -0.018         0.086         0.079
+
+
+           Model Estimated Covariances
+              AVO           VIV_POS       VIV_NEG
+              ________      ________      ________
+ AVO           47.768
+ VIV_POS       -0.874        20.579
+ VIV_NEG        1.863         5.650        19.977
+
+
+           Residuals for Covariances
+              AVO           VIV_POS       VIV_NEG
+              ________      ________      ________
+ AVO            0.099
+ VIV_POS        0.036         0.014
+ VIV_NEG        2.289         4.781        -0.036
+
+
+     UNIVARIATE DISTRIBUTION FIT
+
+     Variable          Observed      Estimated      Residual (Obs.-Est.)    Stand. Residual
+     VP_POS
+       Category 1        0.756          0.743                  0.013                0.684
+       Category 2        0.244          0.257                 -0.013               -0.684
+     VP_NEG
+       Category 1        0.761          0.859                 -0.098               -6.713
+       Category 2        0.239          0.141                  0.098                6.713
+
+
+     BIVARIATE DISTRIBUTIONS FIT
+
+     Variable       Variable          Observed     Estimated    Residual (Obs.-Est.)  Stand. Residual
+     VP_POS         VP_NEG
+       Category 1     Category 1        0.620       0.638            -0.018           -0.917
+       Category 1     Category 2        0.144       0.105             0.039            3.015
+       Category 2     Category 1        0.159       0.221            -0.062           -3.573
+       Category 2     Category 2        0.078       0.036             0.042            5.336
+
+
+     Beginning Time:  16:07:06
+        Ending Time:  16:07:16
+       Elapsed Time:  00:00:10
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2019 Muthen & Muthen

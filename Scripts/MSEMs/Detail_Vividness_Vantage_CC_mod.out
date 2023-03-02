@@ -1,0 +1,1055 @@
+Mplus VERSION 8.4 (Mac)
+MUTHEN & MUTHEN
+12/30/2022   9:47 AM
+
+INPUT INSTRUCTIONS
+
+  !MSEM for Detail, Vividness and Vantage Point with CC, 12/29/2022
+  title: Modifications for the complete Model looking at detail, vividness and vantage point
+
+  DATA:
+  FILE = "df_MPlus_12_29.dat";
+  VARIABLE:
+  NAMES = ID trial DERS Avo AvoS LNB_MEFF VP_Pos VP_Neg Rich_Pos Rich_Neg Det_Pos
+       Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos Ext_Neg DERS_sc Avo_sc LNB_sc
+       DERS_sq Avo_sq LNB_sq;
+  USEVARIABLES = ID DERS_sc LNB_sc Avo Int_Pos Int_Neg Viv_Pos Viv_Neg VP_Pos VP_Neg CCxDERS
+  MISSING=.;
+  CLUSTER = ID;
+  BETWEEN = DERS_sc Avo LNB_sc CCxDERS;
+  Categorical = VP_Pos VP_Neg;
+  DEFINE: CCxDERS = LNB_sc*DERS_sc;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  ESTIMATOR = WLSMV;
+  MODEL:
+  %WITHIN%
+  Int_Neg;
+  Int_Pos;
+  Viv_Neg; !variance at the within-person level
+  Viv_Pos; !if you want to model means, use [] around the var name
+  %BETWEEN%
+  Int_Neg on Avo (b1)
+           DERS_sc (c1);
+  Int_Pos on Avo (b2)
+          DERS_sc (c2);
+  Viv_Neg on Avo (bd1)
+           DERS_sc (cd1);
+  Viv_Pos on Avo (bd2)
+          DERS_sc (cd2);
+  VP_Neg on Avo (bv1)
+           DERS_sc (cv1);
+  VP_Pos on Avo (bv2)
+          DERS_sc (cv2);
+  Avo on DERS_sc (a);
+  AVO on LNB_sc;
+  AVO on CCxDERS;
+  Viv_Pos WITH Viv_Neg; !residual covariance
+  Int_Neg WITH Int_Pos;
+
+  OUTPUT:
+  stand residual;
+  mod(0)
+
+
+
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+  USEVARIABLES = ID DERS_sc LNB_sc Avo Int_Pos Int_Neg Viv_Pos Viv_Neg VP_Pos VP_Neg CCxDERS;
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      VP_POS      11 13 17 21 23 29 30 31 34 35 41 43 45 47 52 53 60 66 69 73 75 80 81 84 88 89
+                  91
+      VP_NEG      13 14 15 23 29 30 34 35 36 41 43 44 48 50 56 59 60 63 72 73 80 81 84 88 89 91
+                  92
+
+*** WARNING in OUTPUT command
+  MODINDICES option is not available for TYPE=TWOLEVEL with estimators
+  ULSMV, WLS, WLSM and WLSMV.  Request for MODINDICES is ignored.
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  60
+   4 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Modifications for the complete Model looking at detail, vividness and vantage point
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         510
+
+Number of dependent variables                                    7
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   AVO         INT_POS     INT_NEG     VIV_POS     VIV_NEG
+
+  Binary and ordered categorical (ordinal)
+   VP_POS      VP_NEG
+
+Observed independent variables
+   DERS_SC     LNB_SC      CCXDERS
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Between variables
+   DERS_SC     LNB_SC      AVO         CCXDERS
+
+
+Estimator                                                    WLSMV
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                1000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                      EMA/FS
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                   7
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  df_MPlus_12_29.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         85
+
+     Average cluster size        6.000
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     VP_POS       0.157      VP_NEG       0.189      INT_POS      0.427
+     INT_NEG      0.424      VIV_POS      0.319      VIV_NEG      0.255
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    VP_POS
+      Category 1    0.752          328.000
+      Category 2    0.248          108.000
+    VP_NEG
+      Category 1    0.749          314.000
+      Category 2    0.251          105.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AVO                  29.512       0.732      17.000    1.19%      23.000     27.000     29.000
+              84.000      48.702       0.415      50.000    1.19%      30.000     35.000
+     INT_POS               7.663       1.453       0.000    2.29%       3.000      6.000      7.000
+             436.000      26.214       3.479      33.000    0.23%       8.000     11.000
+     INT_NEG               9.303       1.474       0.000    3.10%       4.000      7.000      8.000
+             419.000      38.416       3.940      45.000    0.24%       9.000     14.000
+     VIV_POS              16.644      -0.035       5.000    0.46%      13.000     15.000     17.000
+             436.000      20.055      -0.674      25.000    4.13%      18.000     21.000
+     VIV_NEG              17.038      -0.121       6.000    0.24%      13.000     16.000     17.000
+             419.000      19.058      -0.695      25.000    4.06%      18.000     21.000
+     DERS_SC               0.011       0.614      -1.589    1.18%      -0.917     -0.380     -0.111
+              85.000       0.994      -0.344       2.442    1.18%       0.091      0.762
+     LNB_SC                0.000      -1.181      -2.795    1.18%      -0.679     -0.049      0.198
+              85.000       0.998       0.922       1.338    1.18%       0.417      0.803
+     CCXDERS               0.082      -0.125      -3.423    1.18%      -0.433     -0.073      0.009
+              85.000       0.830       2.848       2.638    1.18%       0.082      0.533
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       39
+
+Chi-Square Test of Model Fit
+
+          Value                             80.444*
+          Degrees of Freedom                    36
+          P-Value                           0.0000
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.049
+
+CFI/TLI
+
+          CFI                                0.533
+          TLI                                0.261
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                            152.267
+          Degrees of Freedom                    57
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.117
+          Value for Between                  0.158
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS           14.835      0.972     15.268      0.000
+    INT_NEG           21.560      1.617     13.337      0.000
+    VIV_POS           13.619      1.032     13.195      0.000
+    VIV_NEG           14.219      0.999     14.231      0.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO               -0.090      0.065     -1.380      0.168
+    DERS_SC           -0.363      0.609     -0.595      0.552
+
+ INT_POS    ON
+    AVO               -0.083      0.068     -1.227      0.220
+    DERS_SC           -0.552      0.541     -1.020      0.308
+
+ VIV_NEG    ON
+    AVO               -0.042      0.048     -0.881      0.378
+    DERS_SC            0.878      0.413      2.126      0.033
+
+ VIV_POS    ON
+    AVO               -0.085      0.043     -1.984      0.047
+    DERS_SC            0.420      0.461      0.910      0.363
+
+ VP_NEG     ON
+    AVO                0.040      0.015      2.567      0.010
+    DERS_SC           -0.168      0.108     -1.559      0.119
+
+ VP_POS     ON
+    AVO                0.027      0.016      1.680      0.093
+    DERS_SC           -0.204      0.123     -1.659      0.097
+
+ AVO        ON
+    DERS_SC            3.791      0.733      5.173      0.000
+    LNB_SC            -0.365      0.574     -0.637      0.524
+    CCXDERS           -0.363      0.739     -0.492      0.623
+
+ VIV_POS  WITH
+    VIV_NEG            4.285      1.053      4.069      0.000
+    INT_POS            0.233      0.974      0.239      0.811
+    INT_NEG            0.706      0.982      0.719      0.472
+
+ INT_NEG  WITH
+    INT_POS           11.455      1.939      5.907      0.000
+
+ VIV_NEG  WITH
+    INT_POS            0.580      0.733      0.790      0.429
+    INT_NEG            1.453      0.994      1.462      0.144
+
+ Intercepts
+    AVO               29.551      0.771     38.333      0.000
+    INT_POS           10.037      2.097      4.787      0.000
+    INT_NEG           11.894      2.105      5.650      0.000
+    VIV_POS           19.110      1.299     14.709      0.000
+    VIV_NEG           18.238      1.470     12.408      0.000
+
+ Thresholds
+    VP_POS$1           1.565      0.498      3.143      0.002
+    VP_NEG$1           1.914      0.482      3.968      0.000
+
+ Residual Variances
+    VP_POS             0.145      0.104      1.394      0.163
+    VP_NEG             0.176      0.107      1.648      0.099
+    AVO               32.817      5.298      6.195      0.000
+    INT_POS           10.188      1.925      5.294      0.000
+    INT_NEG           15.086      2.534      5.953      0.000
+    VIV_POS            6.134      1.396      4.394      0.000
+    VIV_NEG            4.104      1.285      3.195      0.001
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS            1.000      0.000    999.000    999.000
+    INT_NEG            1.000      0.000    999.000    999.000
+    VIV_POS            1.000      0.000    999.000    999.000
+    VIV_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO               -0.151      0.108     -1.402      0.161
+    DERS_SC           -0.083      0.139     -0.595      0.552
+
+ INT_POS    ON
+    AVO               -0.166      0.133     -1.250      0.211
+    DERS_SC           -0.150      0.146     -1.030      0.303
+
+ VIV_NEG    ON
+    AVO               -0.130      0.146     -0.889      0.374
+    DERS_SC            0.371      0.161      2.309      0.021
+
+ VIV_POS    ON
+    AVO               -0.223      0.109     -2.047      0.041
+    DERS_SC            0.150      0.164      0.919      0.358
+
+ VP_NEG     ON
+    AVO                0.551      0.185      2.983      0.003
+    DERS_SC           -0.318      0.203     -1.570      0.116
+
+ VP_POS     ON
+    AVO                0.431      0.231      1.865      0.062
+    DERS_SC           -0.437      0.256     -1.706      0.088
+
+ AVO        ON
+    DERS_SC            0.517      0.081      6.413      0.000
+    LNB_SC            -0.049      0.077     -0.643      0.520
+    CCXDERS           -0.041      0.083     -0.492      0.623
+
+ VIV_POS  WITH
+    VIV_NEG            0.854      0.103      8.300      0.000
+    INT_POS            0.029      0.123      0.239      0.811
+    INT_NEG            0.073      0.103      0.716      0.474
+
+ INT_NEG  WITH
+    INT_POS            0.924      0.055     16.651      0.000
+
+ VIV_NEG  WITH
+    INT_POS            0.090      0.111      0.805      0.421
+    INT_NEG            0.185      0.116      1.597      0.110
+
+ Intercepts
+    AVO                4.454      0.355     12.544      0.000
+    INT_POS            3.024      0.633      4.776      0.000
+    INT_NEG            2.997      0.554      5.407      0.000
+    VIV_POS            7.565      0.869      8.701      0.000
+    VIV_NEG            8.512      1.424      5.977      0.000
+
+ Thresholds
+    VP_POS$1           1.565      0.498      3.143      0.002
+    VP_NEG$1           1.914      0.482      3.968      0.000
+
+ Residual Variances
+    VP_POS             0.812      0.175      4.649      0.000
+    VP_NEG             0.771      0.152      5.079      0.000
+    AVO                0.746      0.082      9.045      0.000
+    INT_POS            0.925      0.065     14.272      0.000
+    INT_NEG            0.958      0.044     21.764      0.000
+    VIV_POS            0.961      0.037     25.826      0.000
+    VIV_NEG            0.894      0.091      9.860      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS            1.000      0.000    999.000    999.000
+    INT_NEG            1.000      0.000    999.000    999.000
+    VIV_POS            1.000      0.000    999.000    999.000
+    VIV_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO               -0.151      0.108     -1.402      0.161
+    DERS_SC           -0.091      0.153     -0.596      0.551
+
+ INT_POS    ON
+    AVO               -0.166      0.133     -1.250      0.211
+    DERS_SC           -0.166      0.161     -1.033      0.302
+
+ VIV_NEG    ON
+    AVO               -0.130      0.146     -0.889      0.374
+    DERS_SC            0.410      0.175      2.339      0.019
+
+ VIV_POS    ON
+    AVO               -0.223      0.109     -2.047      0.041
+    DERS_SC            0.166      0.180      0.921      0.357
+
+ VP_NEG     ON
+    AVO                0.551      0.185      2.983      0.003
+    DERS_SC           -0.351      0.222     -1.581      0.114
+
+ VP_POS     ON
+    AVO                0.431      0.231      1.865      0.062
+    DERS_SC           -0.483      0.281     -1.719      0.086
+
+ AVO        ON
+    DERS_SC            0.571      0.084      6.837      0.000
+    LNB_SC            -0.055      0.086     -0.644      0.520
+    CCXDERS           -0.055      0.111     -0.492      0.623
+
+ VIV_POS  WITH
+    VIV_NEG            0.854      0.103      8.300      0.000
+    INT_POS            0.029      0.123      0.239      0.811
+    INT_NEG            0.073      0.103      0.716      0.474
+
+ INT_NEG  WITH
+    INT_POS            0.924      0.055     16.651      0.000
+
+ VIV_NEG  WITH
+    INT_POS            0.090      0.111      0.805      0.421
+    INT_NEG            0.185      0.116      1.597      0.110
+
+ Intercepts
+    AVO                4.454      0.355     12.544      0.000
+    INT_POS            3.024      0.633      4.776      0.000
+    INT_NEG            2.997      0.554      5.407      0.000
+    VIV_POS            7.565      0.869      8.701      0.000
+    VIV_NEG            8.512      1.424      5.977      0.000
+
+ Thresholds
+    VP_POS$1           1.565      0.498      3.143      0.002
+    VP_NEG$1           1.914      0.482      3.968      0.000
+
+ Residual Variances
+    VP_POS             0.812      0.175      4.649      0.000
+    VP_NEG             0.771      0.152      5.079      0.000
+    AVO                0.746      0.082      9.045      0.000
+    INT_POS            0.925      0.065     14.272      0.000
+    INT_NEG            0.958      0.044     21.764      0.000
+    VIV_POS            0.961      0.037     25.826      0.000
+    VIV_NEG            0.894      0.091      9.860      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS           14.835      0.972     15.268      0.000
+    INT_NEG           21.560      1.617     13.337      0.000
+    VIV_POS           13.619      1.032     13.195      0.000
+    VIV_NEG           14.219      0.999     14.231      0.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO               -0.090      0.065     -1.380      0.168
+    DERS_SC           -0.363      0.609     -0.595      0.552
+
+ INT_POS    ON
+    AVO               -0.083      0.068     -1.227      0.220
+    DERS_SC           -0.552      0.541     -1.020      0.308
+
+ VIV_NEG    ON
+    AVO               -0.042      0.048     -0.881      0.378
+    DERS_SC            0.878      0.413      2.126      0.033
+
+ VIV_POS    ON
+    AVO               -0.085      0.043     -1.984      0.047
+    DERS_SC            0.420      0.461      0.910      0.363
+
+ VP_NEG     ON
+    AVO                0.040      0.015      2.567      0.010
+    DERS_SC           -0.168      0.108     -1.559      0.119
+
+ VP_POS     ON
+    AVO                0.027      0.016      1.680      0.093
+    DERS_SC           -0.204      0.123     -1.659      0.097
+
+ AVO        ON
+    DERS_SC            3.791      0.733      5.173      0.000
+    LNB_SC            -0.365      0.574     -0.637      0.524
+    CCXDERS           -0.363      0.739     -0.492      0.623
+
+ VIV_POS  WITH
+    VIV_NEG            4.285      1.053      4.069      0.000
+    INT_POS            0.233      0.974      0.239      0.811
+    INT_NEG            0.706      0.982      0.719      0.472
+
+ INT_NEG  WITH
+    INT_POS           11.455      1.939      5.907      0.000
+
+ VIV_NEG  WITH
+    INT_POS            0.580      0.733      0.790      0.429
+    INT_NEG            1.453      0.994      1.462      0.144
+
+ Intercepts
+    AVO               29.551      0.771     38.333      0.000
+    INT_POS           10.037      2.097      4.787      0.000
+    INT_NEG           11.894      2.105      5.650      0.000
+    VIV_POS           19.110      1.299     14.709      0.000
+    VIV_NEG           18.238      1.470     12.408      0.000
+
+ Thresholds
+    VP_POS$1           1.565      0.498      3.143      0.002
+    VP_NEG$1           1.914      0.482      3.968      0.000
+
+ Residual Variances
+    VP_POS             0.145      0.104      1.394      0.163
+    VP_NEG             0.176      0.107      1.648      0.099
+    AVO               32.817      5.298      6.195      0.000
+    INT_POS           10.188      1.925      5.294      0.000
+    INT_NEG           15.086      2.534      5.953      0.000
+    VIV_POS            6.134      1.396      4.394      0.000
+    VIV_NEG            4.104      1.285      3.195      0.001
+
+
+R-SQUARE
+
+Within Level
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    VP_POS             0.188      0.175      1.076      0.282
+    VP_NEG             0.229      0.152      1.509      0.131
+    AVO                0.254      0.082      3.087      0.002
+    INT_POS            0.075      0.065      1.162      0.245
+    INT_NEG            0.042      0.044      0.957      0.338
+    VIV_POS            0.039      0.037      1.040      0.298
+    VIV_NEG            0.106      0.091      1.170      0.242
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.688E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+RESIDUAL OUTPUT
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED)
+
+
+           Model Estimated Means/Intercepts/Thresholds
+              VP_POS$1      VP_NEG$1      AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+                0.754         0.741        29.551         7.581         9.227
+
+
+           Model Estimated Means/Intercepts/Thresholds
+              VIV_POS       VIV_NEG
+              ________      ________
+               16.600        16.995
+
+
+           Residuals for Means/Intercepts/Thresholds
+              VP_POS$1      VP_NEG$1      AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Means/Intercepts/Thresholds
+              VIV_POS       VIV_NEG
+              ________      ________
+                0.000         0.000
+
+
+           Model Estimated Slopes
+              DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________
+ VP_POS        -0.100        -0.010        -0.010
+ VP_NEG        -0.017        -0.015        -0.014
+ AVO            3.791        -0.365        -0.363
+ INT_POS       -0.867         0.030         0.030
+ INT_NEG       -0.705         0.033         0.033
+ VIV_POS        0.098         0.031         0.031
+ VIV_NEG        0.718         0.015         0.015
+
+
+           Residuals for Slopes
+              DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________
+ VP_POS         0.000         0.144         0.117
+ VP_NEG         0.000        -0.058        -0.004
+ AVO            0.000         0.017        -0.166
+ INT_POS        0.000         0.267         0.580
+ INT_NEG        0.000        -0.255        -0.247
+ VIV_POS        0.000        -0.031        -0.057
+ VIV_NEG        0.000         0.309        -0.520
+
+
+           Model Estimated Within Level Covariances
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.000         1.000
+ AVO            0.000         0.000         0.000
+ INT_POS        0.000         0.000         0.000        14.835
+ INT_NEG        0.000         0.000         0.000         0.000        21.560
+ VIV_POS        0.000         0.000         0.000         0.000         0.000
+ VIV_NEG        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Level Covariances
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS       13.619
+ VIV_NEG        0.000        14.219
+
+
+           Residuals for Within Level Covariances
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.137         0.000
+ AVO            0.000         0.000         0.000
+ INT_POS        0.282        -0.146         0.000         0.000
+ INT_NEG       -0.104        -0.074         0.000         1.217         0.000
+ VIV_POS       -1.142         0.016         0.000         1.550         0.541
+ VIV_NEG        0.037        -1.308         0.000        -0.548         2.432
+
+
+           Residuals for Within Level Covariances
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS        0.000
+ VIV_NEG        1.321         0.000
+
+
+           Model Estimated Within Level Correlations
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.000         1.000
+ AVO            0.000         0.000         1.000
+ INT_POS        0.000         0.000         0.000         1.000
+ INT_NEG        0.000         0.000         0.000         0.000         1.000
+ VIV_POS        0.000         0.000         0.000         0.000         0.000
+ VIV_NEG        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Level Correlations
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS        1.000
+ VIV_NEG        0.000         1.000
+
+
+           Residuals for Within Level Correlations
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.137         0.000
+ AVO            0.000         0.000         0.000
+ INT_POS        0.073        -0.038         0.000         0.000
+ INT_NEG       -0.022        -0.016         0.000         0.068         0.000
+ VIV_POS       -0.309         0.004         0.000         0.109         0.032
+ VIV_NEG        0.010        -0.347         0.000        -0.038         0.139
+
+
+           Residuals for Within Level Correlations
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS        0.000
+ VIV_NEG        0.095         0.000
+
+
+           Model Estimated Between Level Covariances
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.169
+ VP_NEG         0.036         0.228
+ AVO            0.900         1.303        32.817
+ INT_POS       -0.075        -0.108        -2.728        10.415
+ INT_NEG       -0.081        -0.118        -2.962        11.702        15.353
+ VIV_POS       -0.076        -0.111        -2.788         0.464         0.958
+ VIV_NEG       -0.038        -0.055        -1.380         0.694         1.577
+
+
+           Model Estimated Between Level Covariances
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS        6.371
+ VIV_NEG        4.403         4.162
+
+
+           Residuals for Between Level Covariances
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.160         0.000
+ AVO           -0.532        -0.365         2.246
+ INT_POS       -0.477        -0.006         0.850         0.000
+ INT_NEG       -0.561        -0.288         1.191         0.000         0.000
+ VIV_POS       -0.170        -0.372         0.505         0.000         0.000
+ VIV_NEG       -0.194         0.048         0.227         0.000         0.000
+
+
+           Residuals for Between Level Covariances
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS        0.000
+ VIV_NEG        0.000         0.000
+
+
+           Model Estimated Between Level Correlations
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.182         1.000
+ AVO            0.382         0.477         1.000
+ INT_POS       -0.056        -0.070        -0.148         1.000
+ INT_NEG       -0.050        -0.063        -0.132         0.925         1.000
+ VIV_POS       -0.074        -0.092        -0.193         0.057         0.097
+ VIV_NEG       -0.045        -0.056        -0.118         0.105         0.197
+
+
+           Model Estimated Between Level Correlations
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS        1.000
+ VIV_NEG        0.855         1.000
+
+
+           Residuals for Between Level Correlations
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.817         0.000
+ AVO           -0.231        -0.145         0.000
+ INT_POS       -0.360        -0.004         0.049         0.000
+ INT_NEG       -0.348        -0.154         0.056         0.000         0.000
+ VIV_POS       -0.164        -0.309         0.040         0.000         0.000
+ VIV_NEG       -0.232         0.050         0.023         0.000         0.000
+
+
+           Residuals for Between Level Correlations
+              VIV_POS       VIV_NEG
+              ________      ________
+ VIV_POS        0.000
+ VIV_NEG        0.000         0.000
+
+
+           Model Estimated Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.137         1.000
+ AVO            0.000         0.000         0.000
+ INT_POS        0.282        -0.146         0.000        14.835
+ INT_NEG       -0.104        -0.074         0.000         1.217        21.560
+ VIV_POS       -1.142         0.016         0.000         1.550         0.541
+ VIV_NEG        0.037        -1.308         0.000        -0.548         2.432
+ DERS_SC        0.000         0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS       13.619
+ VIV_NEG        1.321        14.219
+ DERS_SC        0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.000         0.000
+ AVO            0.000         0.000         0.000
+ INT_POS        0.000         0.000         0.000         0.000
+ INT_NEG        0.000         0.000         0.000         0.000         0.000
+ VIV_POS        0.000         0.000         0.000         0.000         0.000
+ VIV_NEG        0.000         0.000         0.000         0.000         0.000
+ DERS_SC        0.000         0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS        0.000
+ VIV_NEG        0.000         0.000
+ DERS_SC        0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.137         1.000
+ AVO            0.000         0.000         0.000
+ INT_POS        0.073        -0.038         0.000         1.000
+ INT_NEG       -0.022        -0.016         0.000         0.068         1.000
+ VIV_POS       -0.309         0.004         0.000         0.109         0.032
+ VIV_NEG        0.010        -0.347         0.000        -0.038         0.139
+ DERS_SC        0.000         0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS        1.000
+ VIV_NEG        0.095         1.000
+ DERS_SC        0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.000         0.000
+ AVO            0.000         0.000         0.000
+ INT_POS        0.000         0.000         0.000         0.000
+ INT_NEG        0.000         0.000         0.000         0.000         0.000
+ VIV_POS        0.000         0.000         0.000         0.000         0.000
+ VIV_NEG        0.000         0.000         0.000         0.000         0.000
+ DERS_SC        0.000         0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS        0.000
+ VIV_NEG        0.000         0.000
+ DERS_SC        0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+                0.748         0.743        29.171         7.658         9.291
+
+
+           Model Estimated Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+               16.598        16.939        -0.083         0.040         0.145
+
+
+           Residuals for Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+               -0.023         0.003        -0.023         0.095        -0.046
+
+
+           Residuals for Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+               -0.009        -0.063         0.000         0.000         0.000
+
+
+           Model Estimated Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.178
+ VP_NEG         0.198         0.228
+ AVO            0.061         0.877        46.263
+ INT_POS       -0.480        -0.100        -4.471        11.018
+ INT_NEG       -0.584        -0.394        -3.874        12.190        15.749
+ VIV_POS       -0.256        -0.485        -1.970         0.390         0.897
+ VIV_NEG       -0.293        -0.020         1.020         0.187         1.166
+ DERS_SC       -0.084        -0.018         3.013        -0.703        -0.569
+ LNB_SC        -0.021        -0.012         0.335        -0.110        -0.084
+ CCXDERS       -0.015        -0.007         0.274        -0.082        -0.064
+
+
+           Model Estimated Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS        6.381
+ VIV_NEG        4.467         4.591
+ DERS_SC        0.088         0.593         0.820
+ LNB_SC         0.034         0.116         0.148         0.800
+ CCXDERS        0.022         0.083         0.108        -0.178         0.551
+
+
+           Residuals for Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.009
+ VP_NEG        -0.007         0.004
+ AVO            0.077        -0.022        -0.064
+ INT_POS        0.008        -0.008         0.217         0.033
+ INT_NEG       -0.044         0.020        -0.132        -0.107         0.138
+ VIV_POS        0.004         0.000        -0.025         0.011         0.002
+ VIV_NEG        0.037        -0.025         0.011        -0.019        -0.045
+ DERS_SC        0.034        -0.009        -0.015         0.102        -0.065
+ LNB_SC         0.094        -0.046         0.043         0.111        -0.160
+ CCXDERS        0.039         0.008        -0.095         0.272        -0.091
+
+
+           Residuals for Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS       -0.003
+ VIV_NEG        0.000         0.268
+ DERS_SC       -0.011        -0.010         0.000
+ LNB_SC        -0.015         0.340         0.000         0.000
+ CCXDERS       -0.026        -0.342         0.000         0.000         0.000
+
+
+           Model Estimated Between Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.983         1.000
+ AVO            0.021         0.270         1.000
+ INT_POS       -0.343        -0.063        -0.198         1.000
+ INT_NEG       -0.348        -0.208        -0.144         0.925         1.000
+ VIV_POS       -0.240        -0.402        -0.115         0.047         0.090
+ VIV_NEG       -0.324        -0.019         0.070         0.026         0.137
+ DERS_SC       -0.221        -0.041         0.489        -0.234        -0.158
+ LNB_SC        -0.056        -0.027         0.055        -0.037        -0.024
+ CCXDERS       -0.046        -0.020         0.054        -0.033        -0.022
+
+
+           Model Estimated Between Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS        1.000
+ VIV_NEG        0.825         1.000
+ DERS_SC        0.038         0.306         1.000
+ LNB_SC         0.015         0.061         0.183         1.000
+ CCXDERS        0.012         0.052         0.161        -0.267         1.000
+
+
+           Residuals for Between Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           INT_POS       INT_NEG
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG        -0.064         0.000
+ AVO            0.026        -0.009         0.000
+ INT_POS        0.014        -0.004         0.010         0.000
+ INT_NEG       -0.016         0.013        -0.004        -0.013         0.000
+ VIV_POS        0.009         0.003        -0.002         0.001         0.000
+ VIV_NEG        0.055        -0.023        -0.001        -0.003        -0.010
+ DERS_SC        0.092        -0.020        -0.002         0.034        -0.017
+ LNB_SC         0.246        -0.106         0.007         0.037        -0.045
+ CCXDERS        0.122         0.023        -0.019         0.110        -0.031
+
+
+           Residuals for Between Correlations for the Joint Model (Dependent and Independent)
+              VIV_POS       VIV_NEG       DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________      ________      ________
+ VIV_POS        0.000
+ VIV_NEG       -0.023         0.000
+ DERS_SC       -0.005        -0.014         0.000
+ LNB_SC        -0.006         0.171         0.000         0.000
+ CCXDERS       -0.014        -0.210         0.000         0.000         0.000
+
+
+     Beginning Time:  09:47:07
+        Ending Time:  09:47:09
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2019 Muthen & Muthen

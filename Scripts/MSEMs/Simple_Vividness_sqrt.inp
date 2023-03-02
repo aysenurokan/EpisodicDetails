@@ -1,0 +1,37 @@
+!MSEM for Vividness, 12/28/2022
+title: Simple model looking at vividness only;
+
+DATA: FILE = "df_MPlus_12_28.dat";
+VARIABLE: 
+NAMES = ID trial DERS Avo AvoS LNB_MEFF LNB_log AMT_Pos AMT_Neg VP_Pos VP_Neg
+     Rich_Pos Rich_Neg Det_Pos Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos
+     Ext_Neg DERS_sq Avo_sq; 
+USEVARIABLES = ID DERS_sq Avo_sq Viv_Pos Viv_Neg;
+MISSING=.;
+CLUSTER = ID; 
+BETWEEN = DERS_sq Avo_sq;
+ANALYSIS:
+TYPE = TWOLEVEL;
+ESTIMATOR = ML;
+MODEL:
+%WITHIN%    
+Viv_Neg; !variance at the within-person level
+Viv_Pos; !if you want to model means, use [] around the var name
+%BETWEEN%     
+Viv_Neg on Avo_sq (b1) 
+         DERS_sq (c1);
+Viv_Pos on Avo_sq (b2)
+        DERS_sq (c2);
+Avo_sq on DERS_sq (a);       
+Viv_Pos WITH Viv_Neg;   
+                
+MODEL CONSTRAINT:
+NEW(pos_ind_viv pos_tot_viv neg_ind_viv neg_tot_viv dif_ind_viv);
+pos_ind_viv = b2*a;
+pos_tot_viv = b2*a + c2;
+neg_ind_viv = b1*a;
+neg_tot_viv = b1*a + c1;
+dif_ind_viv = pos_ind_viv - neg_ind_viv;
+
+output:
+stand residual;

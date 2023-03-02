@@ -1,0 +1,44 @@
+!MSEM for Vantage Point, 12/29/2022
+title: Simple model looking at VP with CC;
+
+DATA: FILE = "df_MPlus_12_29.dat";
+VARIABLE: 
+NAMES = ID trial DERS Avo AvoS LNB_MEFF VP_Pos VP_Neg Rich_Pos Rich_Neg Det_Pos
+     Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos Ext_Neg DERS_sc Avo_sc LNB_sc
+     DERS_sq Avo_sq LNB_sq; 
+MISSING=.;
+USEVARIABLES = ID DERS_sc Avo LNB_sc VP_Pos VP_Neg CCxDERS;
+CLUSTER = ID; 
+BETWEEN = DERS_sc Avo LNB_sc CCxDERS;
+Categorical = VP_Pos VP_Neg;
+DEFINE: CCxDERS = LNB_sc*DERS_sc;
+ANALYSIS:
+TYPE = TWOLEVEL;
+ESTIMATOR = WLSMV;
+MODEL:
+%BETWEEN%     
+VP_Neg on Avo (b1) 
+         DERS_sc (c1);
+VP_Pos on Avo (b2)
+        DERS_sc (c2);
+Avo on DERS_sc (a);       
+
+!regress AVO on CC and the CC x DERS interaction
+!this is the main effect of CC on AVO when DERS is at its mean 
+!(as long as you z-scored or mean-centered DERS)
+AVO on LNB_sc; 
+!this is the interaction effect -- 
+!indicates whether effect of DERS on AVO varies according to level of CC
+AVO on CCxDERS;
+
+MODEL CONSTRAINT:
+NEW(pos_ind_vp pos_tot_vp neg_ind_vp neg_tot_vp dif_ind_vp);
+pos_ind_vp = b2*a;
+pos_tot_vp = b2*a + c2;
+neg_ind_vp = b1*a;
+neg_tot_vp = b1*a + c1;
+dif_ind_vp = pos_ind_vp - neg_ind_vp;
+
+OUTPUT: 
+stand residual;
+

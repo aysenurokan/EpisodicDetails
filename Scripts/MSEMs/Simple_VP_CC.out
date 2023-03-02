@@ -1,0 +1,701 @@
+Mplus VERSION 8.4 (Mac)
+MUTHEN & MUTHEN
+12/30/2022   2:54 PM
+
+INPUT INSTRUCTIONS
+
+  !MSEM for Vantage Point, 12/29/2022
+  title: Simple model looking at VP with CC;
+
+  DATA: FILE = "df_MPlus_12_29.dat";
+  VARIABLE:
+  NAMES = ID trial DERS Avo AvoS LNB_MEFF VP_Pos VP_Neg Rich_Pos Rich_Neg Det_Pos
+       Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos Ext_Neg DERS_sc Avo_sc LNB_sc
+       DERS_sq Avo_sq LNB_sq;
+  MISSING=.;
+  USEVARIABLES = ID DERS_sc Avo LNB_sc VP_Pos VP_Neg CCxDERS;
+  CLUSTER = ID;
+  BETWEEN = DERS_sc Avo LNB_sc CCxDERS;
+  Categorical = VP_Pos VP_Neg;
+  DEFINE: CCxDERS = LNB_sc*DERS_sc;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  ESTIMATOR = WLSMV;
+  MODEL:
+  %BETWEEN%
+  VP_Neg on Avo (b1)
+           DERS_sc (c1);
+  VP_Pos on Avo (b2)
+          DERS_sc (c2);
+  Avo on DERS_sc (a);
+
+  !regress AVO on CC and the CC x DERS interaction
+  !this is the main effect of CC on AVO when DERS is at its mean
+  !(as long as you z-scored or mean-centered DERS)
+  AVO on LNB_sc;
+  !this is the interaction effect --
+  !indicates whether effect of DERS on AVO varies according to level of CC
+  AVO on CCxDERS;
+
+  MODEL CONSTRAINT:
+  NEW(pos_ind_vp pos_tot_vp neg_ind_vp neg_tot_vp dif_ind_vp);
+  pos_ind_vp = b2*a;
+  pos_tot_vp = b2*a + c2;
+  neg_ind_vp = b1*a;
+  neg_tot_vp = b1*a + c1;
+  dif_ind_vp = pos_ind_vp - neg_ind_vp;
+
+  OUTPUT:
+  stand residual;
+
+
+
+
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      VP_POS      11 13 17 21 23 29 30 31 34 35 41 43 45 47 52 53 60 66 69 73 75 80 81 84 88 89
+                  91
+      VP_NEG      13 14 15 23 29 30 34 35 36 41 43 44 48 50 56 59 60 63 72 73 80 81 84 88 89 91
+                  92
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  60
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Simple model looking at VP with CC;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         510
+
+Number of dependent variables                                    3
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   AVO
+
+  Binary and ordered categorical (ordinal)
+   VP_POS      VP_NEG
+
+Observed independent variables
+   DERS_SC     LNB_SC      CCXDERS
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Between variables
+   DERS_SC     AVO         LNB_SC      CCXDERS
+
+
+Estimator                                                    WLSMV
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                1000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            10
+  Minimum value for logit thresholds                           -10
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                      EMA/FS
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                   7
+  Dimensions of numerical integration                            1
+  Adaptive quadrature                                           ON
+Link                                                        PROBIT
+Cholesky                                                        ON
+
+Input data file(s)
+  df_MPlus_12_29.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         85
+
+     Average cluster size        6.000
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     VP_POS       0.170      VP_NEG       0.190
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    VP_POS
+      Category 1    0.752          328.000
+      Category 2    0.248          108.000
+    VP_NEG
+      Category 1    0.749          314.000
+      Category 2    0.251          105.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AVO                  29.512       0.732      17.000    1.19%      23.000     27.000     29.000
+              84.000      48.702       0.415      50.000    1.19%      30.000     35.000
+     DERS_SC               0.011       0.614      -1.589    1.18%      -0.917     -0.380     -0.111
+              85.000       0.994      -0.344       2.442    1.18%       0.091      0.762
+     LNB_SC                0.000      -1.181      -2.795    1.18%      -0.679     -0.049      0.198
+              85.000       0.998       0.922       1.338    1.18%       0.417      0.803
+     CCXDERS               0.082      -0.125      -3.423    1.18%      -0.433     -0.073      0.009
+              85.000       0.830       2.848       2.638    1.18%       0.082      0.533
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       13
+
+Chi-Square Test of Model Fit
+
+          Value                              9.434*
+          Degrees of Freedom                     6
+          P-Value                           0.1506
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.033
+
+CFI/TLI
+
+          CFI                                0.867
+          TLI                                0.712
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                             38.873
+          Degrees of Freedom                    13
+          P-Value                           0.0002
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.079
+          Value for Between                  0.235
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+Between Level
+
+ VP_NEG     ON
+    AVO                0.030      0.014      2.116      0.034
+    DERS_SC           -0.132      0.105     -1.253      0.210
+
+ VP_POS     ON
+    AVO                0.015      0.014      1.047      0.295
+    DERS_SC           -0.156      0.118     -1.322      0.186
+
+ AVO        ON
+    DERS_SC            3.791      0.733      5.173      0.000
+    LNB_SC            -0.371      0.625     -0.594      0.553
+    CCXDERS           -0.465      0.821     -0.566      0.572
+
+ Intercepts
+    AVO               29.551      0.771     38.333      0.000
+
+ Thresholds
+    VP_POS$1           1.190      0.432      2.754      0.006
+    VP_NEG$1           1.637      0.448      3.652      0.000
+
+ Residual Variances
+    VP_POS             0.162      0.110      1.473      0.141
+    VP_NEG             0.196      0.111      1.757      0.079
+    AVO               35.046      5.285      6.631      0.000
+
+New/Additional Parameters
+    POS_IND_           0.056      0.054      1.033      0.302
+    POS_TOT_          -0.100      0.104     -0.955      0.339
+    NEG_IND_           0.115      0.056      2.053      0.040
+    NEG_TOT_          -0.017      0.099     -0.175      0.861
+    DIF_IND_          -0.059      0.052     -1.137      0.256
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+Between Level
+
+ VP_NEG     ON
+    AVO                0.444      0.187      2.370      0.018
+    DERS_SC           -0.277      0.220     -1.262      0.207
+
+ VP_POS     ON
+    AVO                0.243      0.221      1.100      0.271
+    DERS_SC           -0.368      0.270     -1.363      0.173
+
+ AVO        ON
+    DERS_SC            0.543      0.082      6.663      0.000
+    LNB_SC            -0.054      0.089     -0.603      0.547
+    CCXDERS           -0.063      0.111     -0.568      0.570
+
+ Intercepts
+    AVO                4.220      0.338     12.477      0.000
+
+ Thresholds
+    VP_POS$1           1.190      0.432      2.754      0.006
+    VP_NEG$1           1.637      0.448      3.652      0.000
+
+ Residual Variances
+    VP_POS             0.900      0.139      6.476      0.000
+    VP_NEG             0.856      0.120      7.150      0.000
+    AVO                0.715      0.086      8.300      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+Between Level
+
+ VP_NEG     ON
+    AVO                0.444      0.187      2.370      0.018
+    DERS_SC           -0.277      0.218     -1.268      0.205
+
+ VP_POS     ON
+    AVO                0.243      0.221      1.100      0.271
+    DERS_SC           -0.367      0.268     -1.369      0.171
+
+ AVO        ON
+    DERS_SC            0.541      0.076      7.087      0.000
+    LNB_SC            -0.053      0.088     -0.604      0.546
+    CCXDERS           -0.066      0.117     -0.568      0.570
+
+ Intercepts
+    AVO                4.220      0.338     12.477      0.000
+
+ Thresholds
+    VP_POS$1           1.190      0.432      2.754      0.006
+    VP_NEG$1           1.637      0.448      3.652      0.000
+
+ Residual Variances
+    VP_POS             0.900      0.139      6.476      0.000
+    VP_NEG             0.856      0.120      7.150      0.000
+    AVO                0.715      0.086      8.300      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+Between Level
+
+ VP_NEG     ON
+    AVO                0.030      0.014      2.116      0.034
+    DERS_SC           -0.132      0.105     -1.253      0.210
+
+ VP_POS     ON
+    AVO                0.015      0.014      1.047      0.295
+    DERS_SC           -0.156      0.118     -1.322      0.186
+
+ AVO        ON
+    DERS_SC            3.791      0.733      5.173      0.000
+    LNB_SC            -0.371      0.625     -0.594      0.553
+    CCXDERS           -0.465      0.821     -0.566      0.572
+
+ Intercepts
+    AVO               29.551      0.771     38.333      0.000
+
+ Thresholds
+    VP_POS$1           1.190      0.432      2.754      0.006
+    VP_NEG$1           1.637      0.448      3.652      0.000
+
+ Residual Variances
+    VP_POS             0.162      0.110      1.473      0.141
+    VP_NEG             0.196      0.111      1.757      0.079
+    AVO               35.046      5.285      6.631      0.000
+
+
+R-SQUARE
+
+Within Level
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    VP_POS             0.100      0.139      0.723      0.470
+    VP_NEG             0.144      0.120      1.204      0.228
+    AVO                0.285      0.086      3.312      0.001
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.810E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+RESIDUAL OUTPUT
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED)
+
+
+           Model Estimated Means/Intercepts/Thresholds
+              VP_POS$1      VP_NEG$1      AVO
+              ________      ________      ________
+                0.754         0.741        29.551
+
+
+           Residuals for Means/Intercepts/Thresholds
+              VP_POS$1      VP_NEG$1      AVO
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           Model Estimated Slopes
+              DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________
+ VP_POS        -0.100        -0.005        -0.007
+ VP_NEG        -0.017        -0.011        -0.014
+ AVO            3.791        -0.371        -0.465
+
+
+           Residuals for Slopes
+              DERS_SC       LNB_SC        CCXDERS
+              ________      ________      ________
+ VP_POS         0.000         0.139         0.114
+ VP_NEG         0.000        -0.061        -0.004
+ AVO            0.000         0.023        -0.065
+
+
+           Model Estimated Within Level Covariances
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.000         1.000
+ AVO            0.000         0.000         0.000
+
+
+           Residuals for Within Level Covariances
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.137         0.000
+ AVO            0.000         0.000         0.000
+
+
+           Model Estimated Within Level Correlations
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.000         1.000
+ AVO            0.000         0.000         1.000
+
+
+           Residuals for Within Level Correlations
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.137         0.000
+ AVO            0.000         0.000         0.000
+
+
+           Model Estimated Between Level Covariances
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         0.169
+ VP_NEG         0.016         0.228
+ AVO            0.516         1.062        35.046
+
+
+           Residuals for Between Level Covariances
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.181         0.000
+ AVO           -0.148        -0.124         0.017
+
+
+           Model Estimated Between Level Correlations
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.080         1.000
+ AVO            0.212         0.376         1.000
+
+
+           Residuals for Between Level Correlations
+              VP_POS        VP_NEG        AVO
+              ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.920         0.000
+ AVO           -0.061        -0.044         0.000
+
+
+           Model Estimated Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+                0.000
+
+
+           Residuals for Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Means/Thresholds for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+                0.000
+
+
+           Model Estimated Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.137         1.000
+ AVO            0.000         0.000         0.000
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        0.000
+
+
+           Residuals for Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.000         0.000
+ AVO            0.000         0.000         0.000
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Covariances/Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        0.000
+
+
+           Model Estimated Within Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.137         1.000
+ AVO            0.000         0.000         0.000
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Within Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        0.000
+
+
+           Residuals for Within Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG         0.000         0.000
+ AVO            0.000         0.000         0.000
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXDERS        0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Within Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        0.000
+
+
+           Model Estimated Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+                0.756         0.743        29.565         0.013         0.009
+
+
+           Model Estimated Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+                0.069
+
+
+           Residuals for Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              VP_POS$1      VP_NEG$1      AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+               -0.009         0.001        -0.004         0.000         0.000
+
+
+           Residuals for Between Means/Thresholds for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+                0.000
+
+
+           Model Estimated Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         0.180
+ VP_NEG         0.198         0.228
+ AVO           -0.002         0.872        49.050
+ DERS_SC       -0.102        -0.021         3.704         1.007
+ LNB_SC        -0.013        -0.014        -0.174         0.069         1.033
+ CCXDERS       -0.025        -0.017         0.252         0.187         0.110
+
+
+           Model Estimated Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        0.896
+
+
+           Residuals for Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         0.026
+ VP_NEG        -0.013         0.006
+ AVO            0.002         0.010        -0.037
+ DERS_SC        0.031        -0.005        -0.011         0.000
+ LNB_SC         0.157        -0.064         0.016         0.000         0.000
+ CCXDERS        0.117        -0.010        -0.056         0.000         0.000
+
+
+           Residuals for Between Covariances/Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        0.000
+
+
+           Model Estimated Between Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         1.000
+ VP_NEG         0.980         1.000
+ AVO           -0.001         0.261         1.000
+ DERS_SC       -0.240        -0.043         0.527         1.000
+ LNB_SC        -0.031        -0.030        -0.024         0.068         1.000
+ CCXDERS       -0.063        -0.038         0.038         0.197         0.114
+
+
+           Model Estimated Between Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        1.000
+
+
+           Residuals for Between Correlations for the Joint Model (Dependent and Independent)
+              VP_POS        VP_NEG        AVO           DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ VP_POS         0.000
+ VP_NEG        -0.134         0.000
+ AVO            0.001         0.000         0.000
+ DERS_SC        0.083        -0.010        -0.001         0.000
+ LNB_SC         0.342        -0.129         0.002         0.000         0.000
+ CCXDERS        0.277        -0.022        -0.008         0.000         0.000
+
+
+           Residuals for Between Correlations for the Joint Model (Dependent and Independent)
+              CCXDERS
+              ________
+ CCXDERS        0.000
+
+
+     Beginning Time:  14:54:44
+        Ending Time:  14:54:44
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2019 Muthen & Muthen

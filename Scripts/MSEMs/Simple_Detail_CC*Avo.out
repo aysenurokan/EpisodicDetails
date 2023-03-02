@@ -1,0 +1,857 @@
+Mplus VERSION 8.4 (Mac)
+MUTHEN & MUTHEN
+12/30/2022   2:36 PM
+
+INPUT INSTRUCTIONS
+
+  !MSEM for Episodic (Internal) Details, 12/30/2022
+  title: Simple model looking at detail with CC influencing outcome;
+
+  DATA: FILE = "df_MPlus_12_29.dat";
+  VARIABLE:
+  NAMES = ID trial DERS Avo AvoS LNB_MEFF VP_Pos VP_Neg Rich_Pos Rich_Neg Det_Pos
+       Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos Ext_Neg DERS_sc Avo_sc LNB_sc
+       DERS_sq Avo_sq LNB_sq;
+  MISSING=.;
+  USEVARIABLES = ID DERS_sc Avo_sc LNB_sc Int_Pos Int_Neg CCxAvo;
+  CLUSTER = ID;
+  BETWEEN = DERS_sc Avo_sc LNB_sc CCxAvo;
+  DEFINE: CCxAvo = LNB_sc*Avo_sc;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  ESTIMATOR = ML;
+  MODEL:
+  %WITHIN%
+  Int_Neg; !variance at the within-person level
+  Int_Pos; !if you want to model means, use [] around the var name
+  %BETWEEN%
+  Int_Neg on Avo_sc (b1)
+           DERS_sc (c1)
+           LNB_sc
+           CCxAvo;
+  Int_Pos on Avo_sc (b2)
+          DERS_sc (c2)
+          LNB_sc
+           CCxAvo;
+  Avo_sc on DERS_sc (a);
+  Int_Pos WITH Int_Neg;
+
+  model indirect:
+  Int_Neg IND DERS_sc;
+  Int_Pos IND DERS_sc;
+
+  OUTPUT:
+  stand residual;
+  stand cinterval (bootstrap);
+  mod(0);
+
+
+
+*** WARNING in OUTPUT command
+  BOOTSTRAP and BCBOOTSTRAP confidence intervals require the specification
+  of BOOTSTRAP in the ANALYSIS command.  Request for CINTERVAL is ignored.
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  66
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Simple model looking at detail with CC influencing outcome;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         504
+
+Number of dependent variables                                    3
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   AVO_SC      INT_POS     INT_NEG
+
+Observed independent variables
+   DERS_SC     LNB_SC      CCXAVO
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Between variables
+   DERS_SC     AVO_SC      LNB_SC      CCXAVO
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  df_MPlus_12_29.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             4
+     Number of clusters                         84
+
+     Average cluster size        6.000
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation
+
+     INT_POS      0.430      INT_NEG      0.422
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         1.000
+ INT_POS        0.855         0.855
+ INT_NEG        0.819         0.712         0.819
+ DERS_SC        1.000         0.855         0.819         1.000
+ LNB_SC         1.000         0.855         0.819         1.000         1.000
+ CCXAVO         1.000         0.855         0.819         1.000         1.000
+
+
+           Covariance Coverage
+              CCXAVO
+              ________
+ CCXAVO         1.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AVO_SC                0.003       0.732      -1.804    1.19%      -0.937     -0.359     -0.071
+              84.000       1.016       0.415       2.962    1.19%       0.074      0.796
+     INT_POS               7.680       1.438       0.000    2.32%       3.000      6.000      7.000
+             431.000      26.478       3.405      33.000    0.23%       8.000     11.000
+     INT_NEG               9.334       1.461       0.000    3.15%       4.000      7.000      8.000
+             413.000      38.799       3.871      45.000    0.24%      10.000     14.000
+     DERS_SC               0.002       0.638      -1.589    1.19%      -0.917     -0.380     -0.111
+              84.000       0.999      -0.321       2.442    1.19%       0.091      0.762
+     LNB_SC                0.003      -1.182      -2.795    1.19%      -0.679      0.019      0.238
+              84.000       1.009       0.892       1.338    1.19%       0.417      0.803
+     CCXAVO               -0.009      -1.139      -5.139    1.19%      -0.456     -0.080     -0.025
+              84.000       1.051       7.603       3.346    1.19%       0.057      0.497
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       18
+
+Loglikelihood
+
+          H0 Value                       -2617.275
+          H1 Value                       -2616.288
+
+Information Criteria
+
+          Akaike (AIC)                    5270.549
+          Bayesian (BIC)                  5346.556
+          Sample-Size Adjusted BIC        5289.422
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              1.974
+          Degrees of Freedom                     3
+          P-Value                           0.5778
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                            102.326
+          Degrees of Freedom                    13
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.040
+          Value for Between                  0.019
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS           14.993      1.137     13.188      0.000
+    INT_NEG           21.811      1.694     12.872      0.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SC            -0.381      0.560     -0.679      0.497
+    DERS_SC           -0.531      0.564     -0.941      0.347
+    LNB_SC            -0.101      0.487     -0.208      0.836
+    CCXAVO            -0.813      0.471     -1.726      0.084
+
+ INT_POS    ON
+    AVO_SC            -0.422      0.469     -0.899      0.369
+    DERS_SC           -0.497      0.476     -1.046      0.296
+    LNB_SC             0.258      0.410      0.630      0.529
+    CCXAVO             0.079      0.401      0.197      0.844
+
+ AVO_SC     ON
+    DERS_SC            0.526      0.094      5.612      0.000
+
+ INT_POS  WITH
+    INT_NEG           11.683      2.161      5.405      0.000
+
+ Intercepts
+    AVO_SC             0.002      0.094      0.025      0.980
+    INT_POS            7.595      0.402     18.895      0.000
+    INT_NEG            9.264      0.477     19.402      0.000
+
+ Residual Variances
+    AVO_SC             0.739      0.114      6.481      0.000
+    INT_POS           10.603      2.104      5.038      0.000
+    INT_NEG           14.582      2.936      4.967      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS            1.000      0.000    999.000    999.000
+    INT_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SC            -0.096      0.141     -0.681      0.496
+    DERS_SC           -0.133      0.140     -0.946      0.344
+    LNB_SC            -0.025      0.122     -0.208      0.835
+    CCXAVO            -0.208      0.118     -1.758      0.079
+
+ INT_POS    ON
+    AVO_SC            -0.127      0.140     -0.903      0.367
+    DERS_SC           -0.148      0.140     -1.054      0.292
+    LNB_SC             0.077      0.122      0.632      0.528
+    CCXAVO             0.024      0.122      0.197      0.844
+
+ AVO_SC     ON
+    DERS_SC            0.522      0.079      6.580      0.000
+
+ INT_POS  WITH
+    INT_NEG            0.940      0.056     16.911      0.000
+
+ Intercepts
+    AVO_SC             0.002      0.093      0.025      0.980
+    INT_POS            2.260      0.251      8.989      0.000
+    INT_NEG            2.313      0.257      8.989      0.000
+
+ Residual Variances
+    AVO_SC             0.727      0.083      8.776      0.000
+    INT_POS            0.939      0.057     16.537      0.000
+    INT_NEG            0.909      0.070     13.037      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS            1.000      0.000    999.000    999.000
+    INT_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SC            -0.096      0.141     -0.681      0.496
+    DERS_SC           -0.133      0.140     -0.949      0.343
+    LNB_SC            -0.025      0.122     -0.208      0.835
+    CCXAVO            -0.203      0.115     -1.772      0.076
+
+ INT_POS    ON
+    AVO_SC            -0.127      0.140     -0.903      0.367
+    DERS_SC           -0.148      0.140     -1.057      0.290
+    LNB_SC             0.077      0.121      0.632      0.527
+    CCXAVO             0.023      0.119      0.197      0.844
+
+ AVO_SC     ON
+    DERS_SC            0.522      0.075      7.003      0.000
+
+ INT_POS  WITH
+    INT_NEG            0.940      0.056     16.911      0.000
+
+ Intercepts
+    AVO_SC             0.002      0.093      0.025      0.980
+    INT_POS            2.260      0.251      8.989      0.000
+    INT_NEG            2.313      0.257      8.989      0.000
+
+ Residual Variances
+    AVO_SC             0.727      0.083      8.776      0.000
+    INT_POS            0.939      0.057     16.537      0.000
+    INT_NEG            0.909      0.070     13.037      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS           14.993      1.137     13.188      0.000
+    INT_NEG           21.811      1.694     12.872      0.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SC            -0.381      0.560     -0.679      0.497
+    DERS_SC           -0.531      0.564     -0.941      0.347
+    LNB_SC            -0.101      0.487     -0.208      0.836
+    CCXAVO            -0.813      0.471     -1.726      0.084
+
+ INT_POS    ON
+    AVO_SC            -0.422      0.469     -0.899      0.369
+    DERS_SC           -0.497      0.476     -1.046      0.296
+    LNB_SC             0.258      0.410      0.630      0.529
+    CCXAVO             0.079      0.401      0.197      0.844
+
+ AVO_SC     ON
+    DERS_SC            0.526      0.094      5.612      0.000
+
+ INT_POS  WITH
+    INT_NEG           11.683      2.161      5.405      0.000
+
+ Intercepts
+    AVO_SC             0.002      0.094      0.025      0.980
+    INT_POS            7.595      0.402     18.895      0.000
+    INT_NEG            9.264      0.477     19.402      0.000
+
+ Residual Variances
+    AVO_SC             0.739      0.114      6.481      0.000
+    INT_POS           10.603      2.104      5.038      0.000
+    INT_NEG           14.582      2.936      4.967      0.000
+
+
+R-SQUARE
+
+Within Level
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    AVO_SC             0.273      0.083      3.290      0.001
+    INT_POS            0.061      0.057      1.080      0.280
+    INT_NEG            0.091      0.070      1.298      0.194
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.453E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+WITHIN
+
+BETWEEN
+
+Effects from DERS_SC to INT_NEG
+
+  Total               -0.731      0.478     -1.529      0.126
+  Total indirect      -0.200      0.297     -0.674      0.500
+
+  Specific indirect 1
+    INT_NEG
+    AVO_SC
+    DERS_SC           -0.200      0.297     -0.674      0.500
+
+  Direct
+    INT_NEG
+    DERS_SC           -0.531      0.564     -0.941      0.347
+
+
+Effects from DERS_SC to INT_POS
+
+  Total               -0.719      0.405     -1.777      0.076
+  Total indirect      -0.222      0.250     -0.888      0.375
+
+  Specific indirect 1
+    INT_POS
+    AVO_SC
+    DERS_SC           -0.222      0.250     -0.888      0.375
+
+  Direct
+    INT_POS
+    DERS_SC           -0.497      0.476     -1.046      0.296
+
+
+
+STANDARDIZED TOTAL, TOTAL INDIRECT, SPECIFIC INDIRECT, AND DIRECT EFFECTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+WITHIN
+
+Effects from DERS_SC to INT_NEG
+
+  Total                0.000      0.000      0.000      1.000
+  Total indirect       0.000      0.000      0.000      1.000
+
+
+Effects from DERS_SC to INT_POS
+
+  Total                0.000      0.000      0.000      1.000
+  Total indirect       0.000      0.000      0.000      1.000
+
+
+BETWEEN
+
+Effects from DERS_SC to INT_NEG
+
+  Total               -0.183      0.118     -1.553      0.120
+  Total indirect      -0.050      0.074     -0.677      0.499
+
+  Specific indirect 1
+    INT_NEG
+    AVO_SC
+    DERS_SC           -0.050      0.074     -0.677      0.499
+
+  Direct
+    INT_NEG
+    DERS_SC           -0.133      0.140     -0.946      0.344
+
+
+Effects from DERS_SC to INT_POS
+
+  Total               -0.214      0.118     -1.815      0.069
+  Total indirect      -0.066      0.074     -0.892      0.373
+
+  Specific indirect 1
+    INT_POS
+    AVO_SC
+    DERS_SC           -0.066      0.074     -0.892      0.373
+
+  Direct
+    INT_POS
+    DERS_SC           -0.148      0.140     -1.054      0.292
+
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+WITHIN
+
+Effects from DERS_SC to INT_NEG
+
+  Total                0.000      0.000      0.000      1.000
+  Total indirect       0.000      0.000      0.000      1.000
+
+
+Effects from DERS_SC to INT_POS
+
+  Total                0.000      0.000      0.000      1.000
+  Total indirect       0.000      0.000      0.000      1.000
+
+
+BETWEEN
+
+Effects from DERS_SC to INT_NEG
+
+  Total               -0.183      0.117     -1.563      0.118
+  Total indirect      -0.050      0.074     -0.677      0.498
+
+  Specific indirect 1
+    INT_NEG
+    AVO_SC
+    DERS_SC           -0.050      0.074     -0.677      0.498
+
+  Direct
+    INT_NEG
+    DERS_SC           -0.133      0.140     -0.949      0.343
+
+
+Effects from DERS_SC to INT_POS
+
+  Total               -0.214      0.117     -1.832      0.067
+  Total indirect      -0.066      0.074     -0.894      0.372
+
+  Specific indirect 1
+    INT_POS
+    AVO_SC
+    DERS_SC           -0.066      0.074     -0.894      0.372
+
+  Direct
+    INT_POS
+    DERS_SC           -0.148      0.140     -1.057      0.290
+
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+WITHIN
+
+Effects from DERS_SC to INT_NEG
+
+  Total                0.000      0.000      0.000      1.000
+  Total indirect       0.000      0.000      0.000      1.000
+
+
+Effects from DERS_SC to INT_POS
+
+  Total                0.000      0.000      0.000      1.000
+  Total indirect       0.000      0.000      0.000      1.000
+
+
+BETWEEN
+
+Effects from DERS_SC to INT_NEG
+
+  Total               -0.731      0.478     -1.529      0.126
+  Total indirect      -0.200      0.297     -0.674      0.500
+
+  Specific indirect 1
+    INT_NEG
+    AVO_SC
+    DERS_SC           -0.200      0.297     -0.674      0.500
+
+  Direct
+    INT_NEG
+    DERS_SC           -0.531      0.564     -0.941      0.347
+
+
+Effects from DERS_SC to INT_POS
+
+  Total               -0.719      0.405     -1.777      0.076
+  Total indirect      -0.222      0.250     -0.888      0.375
+
+  Specific indirect 1
+    INT_POS
+    AVO_SC
+    DERS_SC           -0.222      0.250     -0.888      0.375
+
+  Direct
+    INT_POS
+    DERS_SC           -0.497      0.476     -1.046      0.296
+
+
+
+
+RESIDUAL OUTPUT
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR WITHIN
+
+
+           Model Estimated Means
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Means
+              CCXAVO
+              ________
+                0.000
+
+
+           Residuals for Means
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Means
+              CCXAVO
+              ________
+                0.000
+
+
+           Model Estimated Covariances
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         0.000
+ INT_POS        0.000        14.993
+ INT_NEG        0.000         0.000        21.811
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXAVO         0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Covariances
+              CCXAVO
+              ________
+ CCXAVO         0.000
+
+
+           Residuals for Covariances
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         0.000
+ INT_POS        0.000         0.002
+ INT_NEG        0.000         1.245         0.024
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXAVO         0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Covariances
+              CCXAVO
+              ________
+ CCXAVO         0.000
+
+
+           Model Estimated Correlations
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         0.000
+ INT_POS        0.000         1.000
+ INT_NEG        0.000         0.000         1.000
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXAVO         0.000         0.000         0.000         0.000         0.000
+
+
+           Model Estimated Correlations
+              CCXAVO
+              ________
+ CCXAVO         0.000
+
+
+           Residuals for Correlations
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         0.000
+ INT_POS        0.000         0.000
+ INT_NEG        0.000         0.069         0.000
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC         0.000         0.000         0.000         0.000         0.000
+ CCXAVO         0.000         0.000         0.000         0.000         0.000
+
+
+           Residuals for Correlations
+              CCXAVO
+              ________
+ CCXAVO         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR BETWEEN
+
+
+           Model Estimated Means
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+                0.003         7.593         9.268         0.002         0.003
+
+
+           Model Estimated Means
+              CCXAVO
+              ________
+               -0.009
+
+
+           Residuals for Means
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+                0.000         0.002        -0.001         0.000         0.000
+
+
+           Residuals for Means
+              CCXAVO
+              ________
+                0.000
+
+
+           Model Estimated Covariances
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         1.016
+ INT_POS       -0.677        11.295
+ INT_NEG       -0.693        12.212        16.033
+ DERS_SC        0.526        -0.693        -0.782         0.999
+ LNB_SC         0.045         0.213        -0.310         0.085         1.009
+ CCXAVO         0.028         0.091        -0.911         0.053         0.180
+
+
+           Model Estimated Covariances
+              CCXAVO
+              ________
+ CCXAVO         1.051
+
+
+           Residuals for Covariances
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         0.000
+ INT_POS       -0.017        -0.001
+ INT_NEG        0.058        -0.213        -0.060
+ DERS_SC        0.000         0.000         0.003         0.000
+ LNB_SC        -0.054         0.021         0.022         0.000         0.000
+ CCXAVO        -0.058         0.025         0.028         0.000         0.000
+
+
+           Residuals for Covariances
+              CCXAVO
+              ________
+ CCXAVO         0.000
+
+
+           Model Estimated Correlations
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         1.000
+ INT_POS       -0.200         1.000
+ INT_NEG       -0.172         0.907         1.000
+ DERS_SC        0.522        -0.206        -0.195         1.000
+ LNB_SC         0.044         0.063        -0.077         0.085         1.000
+ CCXAVO         0.027         0.026        -0.222         0.051         0.174
+
+
+           Model Estimated Correlations
+              CCXAVO
+              ________
+ CCXAVO         1.000
+
+
+           Residuals for Correlations
+              AVO_SC        INT_POS       INT_NEG       DERS_SC       LNB_SC
+              ________      ________      ________      ________      ________
+ AVO_SC         0.000
+ INT_POS       -0.005         0.000
+ INT_NEG        0.014        -0.014         0.000
+ DERS_SC        0.000         0.000         0.000         0.000
+ LNB_SC        -0.053         0.006         0.005         0.000         0.000
+ CCXAVO        -0.056         0.007         0.007         0.000         0.000
+
+
+           Residuals for Correlations
+              CCXAVO
+              ________
+ CCXAVO         0.000
+
+
+MODEL MODIFICATION INDICES
+
+NOTE:  Modification indices for direct effects of observed dependent variables
+regressed on covariates may not be included.  To include these, request
+MODINDICES (ALL).
+
+Minimum M.I. value for printing the modification index     0.000
+
+                                   M.I.     E.P.C.  Std E.P.C.  StdYX E.P.C.
+
+Within Level
+
+ON Statements
+
+INT_POS  ON INT_NEG                1.434     0.058      0.058        0.070
+INT_NEG  ON INT_POS                1.434     0.085      0.085        0.070
+
+WITH Statements
+
+INT_NEG  WITH INT_POS              1.434     1.273      1.273        0.070
+
+Between Level
+
+ON Statements
+
+AVO_SC   ON INT_POS                0.479    -0.229     -0.229       -0.764
+AVO_SC   ON INT_NEG                0.427     0.072      0.072        0.285
+AVO_SC   ON LNB_SC                 0.327    -0.054     -0.054       -0.053
+AVO_SC   ON CCXAVO                 0.363    -0.055     -0.055       -0.056
+
+WITH Statements
+
+DERS_SC  WITH AVO_SC               0.533     0.737      0.737        0.858
+LNB_SC   WITH AVO_SC               0.226    -0.044     -0.044       -0.051
+CCXAVO   WITH AVO_SC               0.262    -0.048     -0.048       -0.055
+
+
+     Beginning Time:  14:36:37
+        Ending Time:  14:36:37
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2019 Muthen & Muthen

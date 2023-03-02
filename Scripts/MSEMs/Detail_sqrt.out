@@ -1,0 +1,501 @@
+Mplus VERSION 8.4 (Mac)
+MUTHEN & MUTHEN
+12/29/2022   4:05 PM
+
+INPUT INSTRUCTIONS
+
+  !MSEM for Episodic (Internal) Details, 12/28/2022
+  title: Simple model looking at detail only;
+
+  DATA: FILE = "df_MPlus_12_28.dat";
+  VARIABLE:
+  NAMES = ID trial DERS Avo AvoS LNB_MEFF LNB_log AMT_Pos AMT_Neg VP_Pos VP_Neg
+       Rich_Pos Rich_Neg Det_Pos Det_Neg Viv_Pos Viv_Neg Int_Pos Int_Neg Ext_Pos
+       Ext_Neg DERS_sq Avo_sq;
+  MISSING=.;
+  USEVARIABLES = ID DERS_sq Avo_sq Int_Pos Int_Neg;
+  CLUSTER = ID;
+  BETWEEN = DERS_sq Avo_sq;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  ESTIMATOR = ML;
+  MODEL:
+  %WITHIN%
+  Int_Neg; !variance at the within-person level
+  Int_Pos; !if you want to model means, use [] around the var name
+  %BETWEEN%
+  Int_Neg on Avo_sq (b1)
+           DERS_sq (c1);
+  Int_Pos on Avo_sq (b2)
+          DERS_sq (c2);
+  Avo_sq on DERS_sq (a);
+  Int_Pos WITH Int_Neg;
+
+  MODEL CONSTRAINT:
+  NEW(pos_ind_int pos_tot_int neg_ind_int neg_tot_int dif_ind_int);
+  pos_ind_int = b2*a;
+  pos_tot_int = b2*a + c2;
+  neg_ind_int = b1*a;
+  neg_tot_int = b1*a + c1;
+  dif_ind_int = pos_ind_int - neg_ind_int;
+
+  OUTPUT:
+  stand residual;
+
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+Simple model looking at detail only;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         570
+
+Number of dependent variables                                    3
+Number of independent variables                                  1
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   AVO_SQ      INT_POS     INT_NEG
+
+Observed independent variables
+   DERS_SQ
+
+Variables with special functions
+
+  Cluster variable      ID
+
+  Between variables
+   DERS_SQ     AVO_SQ
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  df_MPlus_12_28.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             6
+     Number of clusters                         95
+
+     Average cluster size        6.000
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation
+
+     INT_POS      0.401      INT_NEG      0.412
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.989
+ INT_POS        0.846         0.854
+ INT_NEG        0.818         0.719         0.828
+ DERS_SQ        0.989         0.854         0.828         1.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     AVO_SQ                5.394       0.419       4.123    1.06%       4.796      5.196      5.385
+              94.000       0.390      -0.124       7.071    1.06%       5.477      5.916
+     INT_POS               7.598       1.577       0.000    2.05%       3.000      6.000      7.000
+             487.000      26.705       3.993      33.000    0.21%       8.000     11.000
+     INT_NEG               9.161       1.524       0.000    2.75%       5.000      7.000      8.000
+             472.000      35.843       4.274      45.000    0.21%       9.000     14.000
+     DERS_SQ               6.513       0.268       4.472    2.11%       5.477      6.164      6.481
+              95.000       1.235      -0.665       8.944    1.05%       6.782      7.416
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Loglikelihood
+
+          H0 Value                       -2929.527
+          H1 Value                       -2929.034
+
+Information Criteria
+
+          Akaike (AIC)                    5887.054
+          Bayesian (BIC)                  5947.893
+          Sample-Size Adjusted BIC        5903.449
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.986
+          Degrees of Freedom                     1
+          P-Value                           0.3208
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                             99.778
+          Degrees of Freedom                     7
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.031
+          Value for Between                  0.004
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS           15.850      1.132     14.005      0.000
+    INT_NEG           20.682      1.497     13.811      0.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SQ            -0.588      0.807     -0.729      0.466
+    DERS_SQ           -0.476      0.453     -1.051      0.293
+
+ INT_POS    ON
+    AVO_SQ            -0.832      0.679     -1.224      0.221
+    DERS_SQ           -0.496      0.382     -1.298      0.194
+
+ AVO_SQ     ON
+    DERS_SQ            0.277      0.050      5.505      0.000
+
+ INT_POS  WITH
+    INT_NEG           10.617      1.902      5.582      0.000
+
+ Intercepts
+    AVO_SQ             3.594      0.332     10.830      0.000
+    INT_POS           15.231      3.264      4.666      0.000
+    INT_NEG           15.381      3.880      3.964      0.000
+
+ Residual Variances
+    AVO_SQ             0.295      0.043      6.857      0.000
+    INT_POS            9.745      1.876      5.194      0.000
+    INT_NEG           13.881      2.611      5.316      0.000
+
+New/Additional Parameters
+    POS_IND_          -0.230      0.193     -1.195      0.232
+    POS_TOT_          -0.726      0.333     -2.177      0.029
+    NEG_IND_          -0.163      0.225     -0.723      0.470
+    NEG_TOT_          -0.639      0.394     -1.623      0.105
+    DIF_IND_          -0.067      0.165     -0.409      0.683
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS            1.000      0.000    999.000    999.000
+    INT_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SQ            -0.096      0.132     -0.731      0.465
+    DERS_SQ           -0.139      0.131     -1.059      0.290
+
+ INT_POS    ON
+    AVO_SQ            -0.159      0.129     -1.235      0.217
+    DERS_SQ           -0.169      0.129     -1.311      0.190
+
+ AVO_SQ     ON
+    DERS_SQ            0.493      0.078      6.329      0.000
+
+ INT_POS  WITH
+    INT_NEG            0.913      0.058     15.693      0.000
+
+ Intercepts
+    AVO_SQ             5.758      0.852      6.761      0.000
+    INT_POS            4.678      0.961      4.867      0.000
+    INT_NEG            4.041      1.007      4.012      0.000
+
+ Residual Variances
+    AVO_SQ             0.757      0.077      9.852      0.000
+    INT_POS            0.919      0.062     14.937      0.000
+    INT_NEG            0.958      0.046     20.855      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS            1.000      0.000    999.000    999.000
+    INT_NEG            1.000      0.000    999.000    999.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SQ            -0.096      0.132     -0.731      0.465
+    DERS_SQ           -0.125      0.118     -1.062      0.288
+
+ INT_POS    ON
+    AVO_SQ            -0.159      0.129     -1.235      0.217
+    DERS_SQ           -0.152      0.116     -1.317      0.188
+
+ AVO_SQ     ON
+    DERS_SQ            0.444      0.066      6.703      0.000
+
+ INT_POS  WITH
+    INT_NEG            0.913      0.058     15.693      0.000
+
+ Intercepts
+    AVO_SQ             5.758      0.852      6.761      0.000
+    INT_POS            4.678      0.961      4.867      0.000
+    INT_NEG            4.041      1.007      4.012      0.000
+
+ Residual Variances
+    AVO_SQ             0.757      0.077      9.852      0.000
+    INT_POS            0.919      0.062     14.937      0.000
+    INT_NEG            0.958      0.046     20.855      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ Variances
+    INT_POS           15.850      1.132     14.005      0.000
+    INT_NEG           20.682      1.497     13.811      0.000
+
+Between Level
+
+ INT_NEG    ON
+    AVO_SQ            -0.588      0.807     -0.729      0.466
+    DERS_SQ           -0.476      0.453     -1.051      0.293
+
+ INT_POS    ON
+    AVO_SQ            -0.832      0.679     -1.224      0.221
+    DERS_SQ           -0.496      0.382     -1.298      0.194
+
+ AVO_SQ     ON
+    DERS_SQ            0.277      0.050      5.505      0.000
+
+ INT_POS  WITH
+    INT_NEG           10.617      1.902      5.582      0.000
+
+ Intercepts
+    AVO_SQ             3.594      0.332     10.830      0.000
+    INT_POS           15.231      3.264      4.666      0.000
+    INT_NEG           15.381      3.880      3.964      0.000
+
+ Residual Variances
+    AVO_SQ             0.295      0.043      6.857      0.000
+    INT_POS            9.745      1.876      5.194      0.000
+    INT_NEG           13.881      2.611      5.316      0.000
+
+
+R-SQUARE
+
+Within Level
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    AVO_SQ             0.243      0.077      3.165      0.002
+    INT_POS            0.081      0.062      1.310      0.190
+    INT_NEG            0.042      0.046      0.911      0.362
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.427E-04
+       (ratio of smallest to largest eigenvalue)
+
+
+RESIDUAL OUTPUT
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR WITHIN
+
+
+           Model Estimated Means
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           Residuals for Means
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           Model Estimated Covariances
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.000
+ INT_POS        0.000        15.850
+ INT_NEG        0.000         0.000        20.682
+ DERS_SQ        0.000         0.000         0.000         0.000
+
+
+           Residuals for Covariances
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.000
+ INT_POS        0.000        -0.006
+ INT_NEG        0.000         0.972         0.010
+ DERS_SQ        0.000         0.000         0.000         0.000
+
+
+           Model Estimated Correlations
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.000
+ INT_POS        0.000         1.000
+ INT_NEG        0.000         0.000         1.000
+ DERS_SQ        0.000         0.000         0.000         0.000
+
+
+           Residuals for Correlations
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.000
+ INT_POS        0.000         0.000
+ INT_NEG        0.000         0.054         0.000
+ DERS_SQ        0.000         0.000         0.000         0.000
+
+
+     ESTIMATED MODEL AND RESIDUALS (OBSERVED - ESTIMATED) FOR BETWEEN
+
+
+           Model Estimated Means
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+                5.397         7.514         9.105         6.513
+
+
+           Residuals for Means
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+                0.000         0.002        -0.002         0.000
+
+
+           Model Estimated Covariances
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.390
+ INT_POS       -0.494        10.600
+ INT_NEG       -0.392        11.334        14.487
+ DERS_SQ        0.342        -0.897        -0.789         1.235
+
+
+           Residuals for Covariances
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.000
+ INT_POS        0.001         0.008
+ INT_NEG        0.001        -0.168        -0.018
+ DERS_SQ        0.000         0.000         0.003         0.000
+
+
+           Model Estimated Correlations
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         1.000
+ INT_POS       -0.243         1.000
+ INT_NEG       -0.165         0.915         1.000
+ DERS_SQ        0.493        -0.248        -0.187         1.000
+
+
+           Residuals for Correlations
+              AVO_SQ        INT_POS       INT_NEG       DERS_SQ
+              ________      ________      ________      ________
+ AVO_SQ         0.000
+ INT_POS        0.001         0.000
+ INT_NEG        0.000        -0.013         0.000
+ DERS_SQ        0.000         0.000         0.001         0.000
+
+
+     Beginning Time:  16:05:49
+        Ending Time:  16:05:49
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2019 Muthen & Muthen
